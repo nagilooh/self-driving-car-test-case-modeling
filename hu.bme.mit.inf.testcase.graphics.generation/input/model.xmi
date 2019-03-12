@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testtrack_modeling:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:testtrack_modeling="http://www.example.org/testtrack_modeling" name="Test scenario" SUT="//@actor.0">
+  <actor name="SUT"/>
+  <actor type="PEDESTRIAN" name="Pedestrian"/>
+  <roadsegment name="Road">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane1" leftLane="//@roadsegment.0/@roadcomponent.6" rightLane="//@roadsegment.0/@roadcomponent.3" toLanes="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane2" leftLane="//@roadsegment.0/@roadcomponent.7" rightLane="//@roadsegment.0/@roadcomponent.4" fromLanes="//@roadsegment.0/@roadcomponent.0" toLanes="//@roadsegment.0/@roadcomponent.2"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane3" leftLane="//@roadsegment.0/@roadcomponent.8" rightLane="//@roadsegment.0/@roadcomponent.5" fromLanes="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk1" leftLane="//@roadsegment.0/@roadcomponent.0"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk2" leftLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk3" leftLane="//@roadsegment.0/@roadcomponent.2"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="SidewalkOpposite1" rightLane="//@roadsegment.0/@roadcomponent.0"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="SidewalkOpposite2" rightLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="SidewalkOpposite3" rightLane="//@roadsegment.0/@roadcomponent.2"/>
+    <sign xsi:type="testtrack_modeling:Crosswalk" name="Crosswalk1" forRoadComponent="//@roadsegment.0/@roadcomponent.1"/>
+  </roadsegment>
+  <frame>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.4" actor="//@actor.1"/>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+  </frame>
+  <frame>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+  </frame>
+  <frame>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.7" actor="//@actor.1"/>
+    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.0"/>
+  </frame>
+</testtrack_modeling:Scenario>
