@@ -44,7 +44,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Sidewalk" eSuperTypes="#//RoadComponent"/>
   <eClassifiers xsi:type="ecore:EClass" name="Lane" eSuperTypes="#//RoadComponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="straight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+        defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromLane" upperBound="-1"
         eType="#//Lane" eOpposite="#//Lane/toLane"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toLane" upperBound="-1"
