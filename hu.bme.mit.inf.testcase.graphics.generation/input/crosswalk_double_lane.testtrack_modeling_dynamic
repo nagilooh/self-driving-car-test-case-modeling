@@ -3,9 +3,9 @@
   <actor name="SUT"/>
   <actor type="PEDESTRIAN" name="Pedestrian"/>
   <roadsegment name="Road">
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane1" leftLane="//@roadsegment.0/@roadcomponent.6" rightLane="//@roadsegment.0/@roadcomponent.3" toLane="//@roadsegment.0/@roadcomponent.1"/>
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane2" leftLane="//@roadsegment.0/@roadcomponent.7" rightLane="//@roadsegment.0/@roadcomponent.4" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.2"/>
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane3" leftLane="//@roadsegment.0/@roadcomponent.8" rightLane="//@roadsegment.0/@roadcomponent.5" fromLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane1" leftLane="//@roadsegment.0/@roadcomponent.6" rightLane="//@roadsegment.0/@roadcomponent.3" straight="true" toLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane2" leftLane="//@roadsegment.0/@roadcomponent.7" rightLane="//@roadsegment.0/@roadcomponent.4" straight="true" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.2"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="Lane3" leftLane="//@roadsegment.0/@roadcomponent.8" rightLane="//@roadsegment.0/@roadcomponent.5" straight="true" fromLane="//@roadsegment.0/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk1" leftLane="//@roadsegment.0/@roadcomponent.0"/>
     <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk2" leftLane="//@roadsegment.0/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="Sidewalk3" leftLane="//@roadsegment.0/@roadcomponent.2"/>
