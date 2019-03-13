@@ -45,10 +45,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="Lane" eSuperTypes="#//RoadComponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="straight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fromLanes" upperBound="-1"
-        eType="#//Lane" eOpposite="#//Lane/toLanes"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="toLanes" upperBound="-1"
-        eType="#//Lane" eOpposite="#//Lane/fromLanes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromLane" upperBound="-1"
+        eType="#//Lane" eOpposite="#//Lane/toLane"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toLane" upperBound="-1"
+        eType="#//Lane" eOpposite="#//Lane/fromLane"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ActorType">
     <eLiterals name="CAR"/>
