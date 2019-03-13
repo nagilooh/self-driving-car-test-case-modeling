@@ -1,5 +1,6 @@
 from pyecore.resources import ResourceSet
 import svgwrite
+import math
 
 
 class Vec2:
@@ -13,9 +14,13 @@ class Vec2:
     def __sub__(self, other):
         return Vec2(self.x - other.x, self.y - other.y)
 
-    # 'other' must be a number!
+    # 'other' must be a number Mat2!
     def __mul__(self, other):
-        return Vec2(self.x * other, self.y * other)
+        if isinstance(other, Mat2):
+            return Vec2(self.x * other.m[0][0] + self.y * other.m[1][0],
+                        self.x * other.m[0][1] + self.y * other.m[1][1])
+        else:
+            return Vec2(self.x * other, self.y * other)
 
     # 'other' must be a number!
     def __truediv__(self, other):
@@ -23,6 +28,90 @@ class Vec2:
 
     def __str__(self):
         return "({0},{1})".format(self.x, self.y)
+
+
+class Vec3:
+    def __init__(self, x=0, y=0, z=0):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __add__(self, other):
+        return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other):
+        return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    # 'other' must be a number or Mat3!
+    def __mul__(self, other):
+        if isinstance(other, Mat3):
+            return Vec3(self.x * other.m[0][0] + self.y * other.m[1][0] + self.z * other.m[2][0],
+                        self.x * other.m[0][1] + self.y * other.m[1][1] + self.z * other.m[2][1],
+                        self.x * other.m[0][2] + self.y * other.m[1][2] + self.z * other.m[2][2],)
+        else:
+            return Vec3(self.x * other, self.y * other, self.z * other)
+
+    # 'other' must be a number!
+    def __truediv__(self, other):
+        return Vec3(self.x / other, self.y / other, self.z / other)
+
+    def __str__(self):
+        return "({0},{1},{2})".format(self.x, self.y, self.z)
+
+
+# row-major matrix 2x2
+class Mat2:
+    def __init__(self,
+                 m00=0, m01=0,
+                 m10=0, m11=0):
+        self.m = [[m00, m01], [m10, m11]]
+
+    def __mul__(self, other):
+        result = Mat2()
+        for i in range(0, 1):
+            for j in range(0, 1):
+                for k in range(0, 1):
+                    result.m[i][j] += self.m[i][k] * other.m[k][j]
+        return result
+
+
+# row-major matrix 2x2
+class Mat3:
+    def __init__(self,
+                 m00=0, m01=0, m02=0,
+                 m10=0, m11=0, m12=0,
+                 m20=0, m21=0, m22=0):
+        self.m = [[m00, m01, m02], [m10, m11, m12], [m20, m21, m22]]
+
+    def __mul__(self, other):
+        result = Mat3()
+        for i in range(0, 2):
+            for j in range(0, 2):
+                for k in range(0, 2):
+                    result.m[i][j] += self.m[i][k] * other.m[k][j]
+        return result
+
+
+# t must be Vec2
+def translate_matrix(t):
+    return Mat3(1, 0, 0,
+                0, 1, 0,
+                t.x, t.y, 1)
+
+
+# s must be Vec2
+def scale_matrix(s):
+    return Mat3(s.x, 0, 0,
+                0, s.y, 0,
+                0, 0, 1)
+
+
+def rotation_matrix(angle):
+    c = math.cos(angle)
+    s = math.sin(angle)
+    return Mat3(c, -s, 0,
+                s, c, 0,
+                0, 0, 1)
 
 
 class Drawable:
@@ -38,8 +127,15 @@ class DrawableRoadsegment(Drawable):
         Drawable.__init__(self)
 
     def draw(self, target):
+        intersection = False
         for component in self.data.roadcomponent:
-            component.drawable.draw(target)
+            if hasattr(component, "straight"):
+                if not component.straight:
+                    intersection = True
+
+        if not intersection:
+            for component in self.data.roadcomponent:
+                component.drawable.draw(target)
 
 
 class DrawableRoadcomponent(Drawable):
@@ -56,7 +152,6 @@ class DrawableLane(DrawableRoadcomponent):
 
     def draw(self, target):
         DrawableRoadcomponent.draw(self, target)
-        # print("LLLLLanee")
         target.add(target.line((self.data.startPos.x, self.data.startPos.y),
                                (self.data.endPos.x, self.data.endPos.y),
                                stroke=svgwrite.rgb(10, 20, 16, '%')))
@@ -179,11 +274,19 @@ def move_to_zero(root):
 
 
 def main():
+    # metamodel_name = "metamodel.ecore"
+    metamodel_name = "testtrack_modeling_dynamic.ecore"
+    # model_name = "model.xmi"
+    # model_name = "crosswalk_double_lane.testtrack_modeling_dynamic"
+    # model_name = "stopped_car_straight_double_lane_single_sidewalk.testtrack_modeling_dynamic"
+    # model_name = "stopped_car_straigt_double_lane_double_sidewalk.testtrack_modeling_dynamic"
+    model_name = "3_way_intersection_double_lane.testtrack_modeling_dynamic"
+    # model_name = "4_way_intersection_double_lane.testtrack_modeling_dynamic"
     rset = ResourceSet()
-    resource = rset.get_resource("input/metamodel.ecore")
+    resource = rset.get_resource("input/" + metamodel_name)
     mm_root = resource.contents[0]
     rset.metamodel_registry[mm_root.nsURI] = mm_root
-    resource = rset.get_resource("input/model.xmi")
+    resource = rset.get_resource("input/" + model_name)
     model_root = resource.contents[0]
     # print("Scenario:\t", model_root)
     for segment in model_root.roadsegment:
@@ -204,7 +307,7 @@ def main():
             component.drawable = drawable_component
 
     for actor in model_root.actor:
-        if actor.type == "CAR":
+        if str(actor.type) == "CAR":
             drawable_actor = DrawableCar()
             actor.size = Vec2(Sizes.carWidth, Sizes.carHeight)
         else:
@@ -218,7 +321,6 @@ def main():
     move_to_zero(model_root)
 
     frame_n = 0
-
     for frame in model_root.frame:
         dwg = svgwrite.Drawing("output/test" + str(frame_n) + ".svg", profile='tiny')
         for state in frame.state:
