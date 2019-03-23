@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <title>Lanes</title>
+  <polygon points="350 490 350 150 10 150 10 10 490 10 490 490 350 490" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
+  <g>
+    <path d="M420,405.88V150c0-70-70-70-70-70H80" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 2px"/>
+    <polygon points="420 420 428.13 400.1 420 404.82 411.87 400.1 420 420"/>
+  </g>
+</svg>

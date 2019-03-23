@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <title>Lanes</title>
+  <g>
+    <polyline points="350 0 350 350 0 350" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
+    <polyline points="0 490 490 490 490 0" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
+  </g>
+</svg>
