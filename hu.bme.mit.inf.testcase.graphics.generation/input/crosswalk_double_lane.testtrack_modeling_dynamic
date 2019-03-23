@@ -15,15 +15,15 @@
     <sign xsi:type="testtrack_modeling:Crosswalk" name="Crosswalk1" forRoadComponent="//@roadsegment.0/@roadcomponent.1"/>
   </roadsegment>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.4" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.4" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.7" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.7" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.1" actor="//@actor.0"/>
   </frame>
 </testtrack_modeling:Scenario>

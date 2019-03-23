@@ -17,15 +17,15 @@
     <roadcomponent xsi:type="testtrack_modeling:Sidewalk" name="SidewalkOpposite3" rightLane="//@roadsegment.0/@roadcomponent.8"/>
   </roadsegment>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.7" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.7" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.2" actor="//@actor.0"/>
+    <state position="//@roadsegment.0/@roadcomponent.1" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.2" actor="//@actor.0"/>
   </frame>
 </testtrack_modeling:Scenario>

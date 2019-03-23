@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testtrack_modeling:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:testtrack_modeling="http://www.example.org/testtrack_modeling" name="Test scenario" SUT="//@actor.0">
+  <actor name="SUT"/>
+  <actor name="Other car"/>
+  <roadsegment name="RoadWest" rightNeighborOfNeighbor="//@roadsegment.1">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWestIn" straight="true" toLane="//@roadsegment.2/@roadcomponent.0"/>
+  </roadsegment>
+  <roadsegment name="RoadSouth" leftNeighborOfNeighbor="//@roadsegment.0">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneSouthOut" straight="true" fromLane="//@roadsegment.2/@roadcomponent.0"/>
+  </roadsegment>
+  <roadsegment name="RoadIntersection">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWS" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.1/@roadcomponent.0"/>
+  </roadsegment>
+  <frame>
+    <state position="//@roadsegment.1/@roadcomponent.0" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+  </frame>
+</testtrack_modeling:Scenario>

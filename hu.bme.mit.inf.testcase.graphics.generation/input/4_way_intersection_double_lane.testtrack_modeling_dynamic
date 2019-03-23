@@ -2,29 +2,29 @@
 <testtrack_modeling:Scenario xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:testtrack_modeling="http://www.example.org/testtrack_modeling" name="Test scenario" SUT="//@actor.0">
   <actor name="SUT"/>
   <actor name="Other car"/>
-  <roadsegment name="RoadWest">
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWestIn" leftLane="//@roadsegment.0/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.0 //@roadsegment.4/@roadcomponent.1 //@roadsegment.4/@roadcomponent.2 //@roadsegment.4/@roadcomponent.5"/>
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWestOut" rightLane="//@roadsegment.0/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.0 //@roadsegment.4/@roadcomponent.5 //@roadsegment.4/@roadcomponent.6 //@roadsegment.4/@roadcomponent.9"/>
+  <roadsegment name="RoadWest" leftNeighborOfNeighbor="//@roadsegment.1" rightNeighborOfNeighbor="//@roadsegment.3">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWestIn" leftLane="//@roadsegment.0/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.0 //@roadsegment.4/@roadcomponent.1 //@roadsegment.4/@roadcomponent.2"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWestOut" rightLane="//@roadsegment.0/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.5 //@roadsegment.4/@roadcomponent.6 //@roadsegment.4/@roadcomponent.9"/>
   </roadsegment>
-  <roadsegment name="RoadNorth">
+  <roadsegment name="RoadNorth" leftNeighborOfNeighbor="//@roadsegment.2" rightNeighborOfNeighbor="//@roadsegment.0">
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneNorthIn" leftLane="//@roadsegment.1/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.8 //@roadsegment.4/@roadcomponent.7 //@roadsegment.4/@roadcomponent.6"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneNorthOut" rightLane="//@roadsegment.1/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.10 //@roadsegment.4/@roadcomponent.3 //@roadsegment.4/@roadcomponent.1"/>
   </roadsegment>
-  <roadsegment name="RoadEast">
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEastIn" leftLane="//@roadsegment.2/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.3 //@roadsegment.4/@roadcomponent.4"/>
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEastOut" rightLane="//@roadsegment.2/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.8 //@roadsegment.4/@roadcomponent.11"/>
+  <roadsegment name="RoadEast" leftNeighborOfNeighbor="//@roadsegment.3" rightNeighborOfNeighbor="//@roadsegment.1">
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEastIn" leftLane="//@roadsegment.2/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.3 //@roadsegment.4/@roadcomponent.4 //@roadsegment.4/@roadcomponent.5"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEastOut" rightLane="//@roadsegment.2/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.8 //@roadsegment.4/@roadcomponent.11 //@roadsegment.4/@roadcomponent.0"/>
   </roadsegment>
-  <roadsegment name="RoadSouth">
+  <roadsegment name="RoadSouth" leftNeighborOfNeighbor="//@roadsegment.0" rightNeighborOfNeighbor="//@roadsegment.2">
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneSouthIn" leftLane="//@roadsegment.3/@roadcomponent.1" straight="true" toLane="//@roadsegment.4/@roadcomponent.9 //@roadsegment.4/@roadcomponent.10 //@roadsegment.4/@roadcomponent.11"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneSouthOut" rightLane="//@roadsegment.3/@roadcomponent.0" straight="true" fromLane="//@roadsegment.4/@roadcomponent.2 //@roadsegment.4/@roadcomponent.4 //@roadsegment.4/@roadcomponent.7"/>
   </roadsegment>
   <roadsegment name="RoadIntersection">
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWE" leftLane="//@roadsegment.4/@roadcomponent.5" straight="true" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWE" leftLane="//@roadsegment.4/@roadcomponent.5" straight="true" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.2/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWN" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.1/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneWS" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.3/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEN" fromLane="//@roadsegment.2/@roadcomponent.0" toLane="//@roadsegment.1/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneES" fromLane="//@roadsegment.2/@roadcomponent.0" toLane="//@roadsegment.3/@roadcomponent.1"/>
-    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEW" rightLane="//@roadsegment.4/@roadcomponent.0" straight="true" fromLane="//@roadsegment.0/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.1"/>
+    <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneEW" rightLane="//@roadsegment.4/@roadcomponent.0" straight="true" fromLane="//@roadsegment.2/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneNW" fromLane="//@roadsegment.1/@roadcomponent.0" toLane="//@roadsegment.0/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneNS" leftLane="//@roadsegment.4/@roadcomponent.10" straight="true" fromLane="//@roadsegment.1/@roadcomponent.0" toLane="//@roadsegment.3/@roadcomponent.1"/>
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneNE" fromLane="//@roadsegment.1/@roadcomponent.0" toLane="//@roadsegment.2/@roadcomponent.1"/>
@@ -33,15 +33,15 @@
     <roadcomponent xsi:type="testtrack_modeling:Lane" name="LaneSE" fromLane="//@roadsegment.3/@roadcomponent.0" toLane="//@roadsegment.2/@roadcomponent.1"/>
   </roadsegment>
   <frame>
-    <state roadcomponent="//@roadsegment.3/@roadcomponent.0" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.3/@roadcomponent.0" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.4/@roadcomponent.10" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.4/@roadcomponent.10" actor="//@actor.1"/>
+    <state position="//@roadsegment.0/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
   <frame>
-    <state roadcomponent="//@roadsegment.1/@roadcomponent.1" actor="//@actor.1"/>
-    <state roadcomponent="//@roadsegment.4/@roadcomponent.0" actor="//@actor.0"/>
+    <state position="//@roadsegment.1/@roadcomponent.1" actor="//@actor.1"/>
+    <state position="//@roadsegment.4/@roadcomponent.0" actor="//@actor.0"/>
   </frame>
 </testtrack_modeling:Scenario>
