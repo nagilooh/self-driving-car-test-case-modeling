@@ -367,10 +367,10 @@ def main():
     # model_name = "crosswalk_double_lane.testtrack_modeling_dynamic"
     # model_name = "stopped_car_straight_double_lane_single_sidewalk.testtrack_modeling_dynamic"
     # model_name = "stopped_car_straigt_double_lane_double_sidewalk.testtrack_modeling_dynamic"
-    # model_name = "2_way_intersection_(turn)_double_lane.testtrack_modeling_dynamic"
+    model_name = "2_way_intersection_(turn)_double_lane.testtrack_modeling_dynamic"
     # model_name = "2_way_intersection_(turn)_double_lane_minimal.testtrack_modeling_dynamic"
     # model_name = "3_way_intersection_double_lane.testtrack_modeling_dynamic"
-    model_name = "4_way_intersection_double_lane.testtrack_modeling_dynamic"
+    # model_name = "4_way_intersection_double_lane.testtrack_modeling_dynamic"
     rset = ResourceSet()
     resource = rset.get_resource("input/" + metamodel_name)
     mm_root = resource.contents[0]
@@ -412,7 +412,7 @@ def main():
     for frame in model_root.frame:
         # print("Frame ", frame_n)
         scale = 0.25
-        dwg = sg.SVGFigure(image_size.x * scale, image_size.y * scale)
+        dwg = sg.SVGFigure(image_size.y * scale, image_size.x * scale)
         # for state in frame.state:
         #     roadcomponent = state.position
         #     set_position_center(state.actor,
