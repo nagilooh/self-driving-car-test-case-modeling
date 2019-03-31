@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="660" height="660" viewBox="0 0 660 660">
-  <title>Lanes</title>
+  <title>Asset</title>
   <polygon points="510 650 510 150 10 150 10 10 650 10 650 650 510 650" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
   <g>
     <path d="M580,580V150c0-70-70-70-70-70H94.12" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 2px"/>

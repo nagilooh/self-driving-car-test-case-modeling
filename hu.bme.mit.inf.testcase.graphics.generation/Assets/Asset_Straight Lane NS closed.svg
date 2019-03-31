@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="1000" viewBox="0 0 160 1000">
-  <title>Lanes</title>
+  <title>Asset</title>
   <rect x="-410" y="430" width="980" height="140" transform="translate(-420 580) rotate(-90)" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
   <g>
     <line x1="80" y1="80" x2="80" y2="905.88" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 2px"/>

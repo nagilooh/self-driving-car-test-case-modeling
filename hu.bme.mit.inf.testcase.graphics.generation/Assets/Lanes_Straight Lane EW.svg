@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="160" viewBox="0 0 1000 160">
-  <title>Lanes</title>
-  <line y1="10" x2="1000" y2="10" style="fill: #fff;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
-  <line y1="150" x2="1000" y2="150" style="fill: #fff;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
-</svg>

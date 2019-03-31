@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
-  <title>Lanes</title>
+  <title>Asset</title>
   <g>
     <polyline points="0 150 350 150 350 500" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
     <polyline points="0 10 490 10 490 500" style="fill: none;stroke: #000;stroke-miterlimit: 10;stroke-width: 10px"/>
