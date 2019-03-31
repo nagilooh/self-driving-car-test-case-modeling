@@ -14,14 +14,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RoadSegment">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="roadcomponent" upperBound="-1"
-        eType="#//RoadComponent" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sign" upperBound="-1" eType="#//Sign"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftNeighborOfNeighbor"
         eType="#//RoadSegment" eOpposite="#//RoadSegment/rightNeighborOfNeighbor"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightNeighborOfNeighbor"
         eType="#//RoadSegment" eOpposite="#//RoadSegment/leftNeighborOfNeighbor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roadcomponent" upperBound="-1"
+        eType="#//RoadComponent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sign" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -49,6 +49,8 @@
         eType="#//Lane" eOpposite="#//Lane/toLane"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toLane" upperBound="-1"
         eType="#//Lane" eOpposite="#//Lane/fromLane"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reverse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ActorType">
     <eLiterals name="CAR"/>
@@ -66,5 +68,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Frame">
     <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
         eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Next" eType="#//Frame"/>
   </eClassifiers>
 </ecore:EPackage>
