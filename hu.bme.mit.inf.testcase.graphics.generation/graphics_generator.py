@@ -1,6 +1,7 @@
 from pyecore.resources import ResourceSet
 import svgutils.transform as sg
 import svgutils.compose as sc
+import glob, os
 
 
 class Vec2:
@@ -499,15 +500,18 @@ def get_right_lane_position(component, right_lane):
         return component.startPos - Vec2(int(right_lane.drawable.figure.width), 0)
 
 
-
 def set_sign_figure(sign):
     # TODO Create assets for signs
     if str(type(sign)) == "<class 'pyecore.ecore.SignsStop'>":
-        sign.drawable.path = "Assets/Asset_Stop.svg"
-        sign.drawable.figure = sg.fromfile("Assets/Asset_Stop.svg")
+        sign.drawable.path = "Assets/Asset_Crosswalk.svg"
+        sign.drawable.figure = sg.fromfile("Assets/Asset_Crosswalk.svg")
+        # sign.drawable.path = "Assets/Asset_Stop.svg"
+        # sign.drawable.figure = sg.fromfile("Assets/Asset_Stop.svg")
     elif str(type(sign)) == "<class 'pyecore.ecore.GiveWaySign'>":
-        sign.drawable.path = "Assets/Asset_Give_Way.svg"
-        sign.drawable.figure = sg.fromfile("Assets/Asset_Give_Way.svg")
+        sign.drawable.path = "Assets/Asset_Crosswalk.svg"
+        sign.drawable.figure = sg.fromfile("Assets/Asset_Crosswalk.svg")
+        # sign.drawable.path = "Assets/Asset_Give_Way.svg"
+        # sign.drawable.figure = sg.fromfile("Assets/Asset_Give_Way.svg")
     elif str(type(sign)) == "<class 'pyecore.ecore.Crosswalk'>":
         sign.drawable.path = "Assets/Asset_Crosswalk.svg"
         sign.drawable.figure = sg.fromfile("Assets/Asset_Crosswalk.svg")
@@ -530,10 +534,11 @@ def set_actor_figure(actor):
 # For NOT RoadComponents (Actors, Signs)
 def set_position(element, component):
     # TODO Place car in the correct position in turns
+    # TODO Keep car facing the right direction when passing in the opposite lane
     element.startPos = component.startPos + \
                        Vec2(int(component.drawable.figure.width) / 2, int(component.drawable.figure.height) / 2) - \
                        Vec2(int(element.drawable.figure.width) / 2, int(element.drawable.figure.height) / 2)
-    if (hasattr(element, 'type') and str(element.type) == "CAR"):
+    if hasattr(element, 'type') and str(element.type) == "CAR":
         element.drawable.direction = (component.direction_beginning + component.direction_end) / 2
         print("direction :", element.drawable.direction)
 
@@ -569,27 +574,9 @@ def get_size(root):
     return Vec2(max_x + 50, max_y + 50)
 
 
-def main():
-    # Load drawing assets
-
-    # metamodel_name = "metamodel.ecore"
-    metamodel_name = "testtrack_modeling_dynamic.ecore"
-    # model_name = "model.xmi"
-    model_name = "crosswalk_double_lane.testtrack_modeling_dynamic"
-    # model_name = "stopped_car_straight_double_lane_single_sidewalk.testtrack_modeling_dynamic"
-    # model_name = "stopped_car_straigt_double_lane_double_sidewalk.testtrack_modeling_dynamic"
-    # model_name = "2_way_intersection_(turn)_double_lane.testtrack_modeling_dynamic"
-    # model_name = "2_way_intersection_(turn)_single_lane.testtrack_modeling_dynamic"
-    # model_name = "3_way_intersection_double_lane.testtrack_modeling_dynamic"
-    # model_name = "4_way_intersection_double_lane.testtrack_modeling_dynamic"
-    rset = ResourceSet()
-    resource = rset.get_resource("input/" + metamodel_name)
-    mm_root = resource.contents[0]
-    rset.metamodel_registry[mm_root.nsURI] = mm_root
-    resource = rset.get_resource("input/" + model_name)
-    model_root = resource.contents[0]
+def load_model(root):
     # print("Scenario:\t", model_root)
-    for segment in model_root.roadsegment:
+    for segment in root.roadsegment:
         drawable_segment = DrawableRoadsegment()
         drawable_segment.data = segment
         segment.drawable = drawable_segment
@@ -604,44 +591,81 @@ def main():
             drawable_sign.data = sign
             sign.drawable = drawable_sign
 
-    for actor in model_root.actor:
+    for actor in root.actor:
         drawable_actor = Drawable()
         drawable_actor.data = actor
         actor.drawable = drawable_actor
         set_actor_figure(actor)
 
-    set_road_direction(model_root.roadsegment[0].roadcomponent[0], direction_beginning=0)
-    set_road_position(model_root.roadsegment[0].roadcomponent[0], start_pos=Vec2(0, 0))
+    set_road_direction(root.roadsegment[0].roadcomponent[0], direction_beginning=0)
+    set_road_position(root.roadsegment[0].roadcomponent[0], start_pos=Vec2(0, 0))
 
-    for segment in model_root.roadsegment:
+    for segment in root.roadsegment:
         for sign in segment.sign:
             set_sign_figure(sign)
             set_position(sign, sign.forRoadComponent)
 
-    move_to_zero(model_root)
+    move_to_zero(root)
 
-    image_size = get_size(model_root)
+
+def draw_frames(root, name):
+    print("Drawing: " + name)
+
+    image_size = get_size(root)
     scale = 0.25
 
     frame_n = 0
-    for frame in model_root.frame:
+    for frame in root.frame:
         print("Frame ", frame_n)
         dwg = sg.SVGFigure(image_size.y * scale, image_size.x * scale)
         for state in frame.state:
             set_position(state.actor, state.position)
-        for segment in model_root.roadsegment:
+        for segment in root.roadsegment:
             segment.drawable.draw(dwg)
-        for actor in model_root.actor:
+        for actor in root.actor:
             print("act_dir: ", actor.drawable.direction)
             actor.drawable.draw(dwg)
 
-        dwg.save("output/test" + str(frame_n) + ".svg")
-        svg = sg.fromfile("output/test" + str(frame_n) + ".svg")
-        originalsvg = sc.SVG("output/test" + str(frame_n) + ".svg")
+        dwg.save("output/" + name + str(frame_n) + ".svg")
+        svg = sg.fromfile("output/" + name + str(frame_n) + ".svg")
+        originalsvg = sc.SVG("output/" + name + str(frame_n) + ".svg")
         originalsvg.scale(scale)
         dwg = sc.Figure(svg.height, svg.width, originalsvg)
-        dwg.save("output/test" + str(frame_n) + ".svg")
+        dwg.save("output/" + name + str(frame_n) + ".svg")
         frame_n += 1
 
+
+def main():
+    # Load drawing assets
+
+    # metamodel_name = "metamodel.ecore"
+    metamodel_name = "testtrack_modeling_dynamic.ecore"
+    # model_name = "model.xmi"
+    # model_name = "crosswalk_double_lane.testtrack_modeling_dynamic"
+    # model_name = "stopped_car_straight_double_lane_single_sidewalk.testtrack_modeling_dynamic"
+    # model_name = "stopped_car_straigt_double_lane_double_sidewalk.testtrack_modeling_dynamic"
+    # model_name = "2_way_intersection_(turn)_double_lane.testtrack_modeling_dynamic"
+    # model_name = "2_way_intersection_(turn)_single_lane.testtrack_modeling_dynamic"
+    # model_name = "3_way_intersection_double_lane.testtrack_modeling_dynamic"
+    # model_name = "4_way_intersection_double_lane.testtrack_modeling_dynamic"
+
+    model_names = []
+    os.chdir("./input")
+    for file in glob.glob("*.testtrack_modeling_dynamic"):
+        model_names.append(file)
+    rset = ResourceSet()
+    resource = rset.get_resource(metamodel_name)
+    mm_root = resource.contents[0]
+    rset.metamodel_registry[mm_root.nsURI] = mm_root
+    os.chdir("./..")
+
+    for model in model_names:
+        print(model)
+        os.chdir("./input")
+        resource = rset.get_resource(model)
+        model_root = resource.contents[0]
+        os.chdir("./..")
+        load_model(model_root)
+        draw_frames(model_root, model)
 
 main()
