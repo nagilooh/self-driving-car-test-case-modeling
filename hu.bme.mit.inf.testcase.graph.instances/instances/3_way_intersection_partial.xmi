@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase:Scenario
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:testcase="http://inf.mit.bme.hu/testcase"
+    xsi:schemaLocation="http://inf.mit.bme.hu/testcase ../../hu.bme.mit.inf.testcase.graph.model/model/testtrack.ecore">
+  <actor name="SUT"/>
+  <roadsegment
+      name="West">
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneWestIn"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="LaneWestOut"/>
+  </roadsegment>
+  <roadsegment
+      name="East">
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneEastIn"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="LaneEastOut"/>
+  </roadsegment>
+  <roadsegment
+      name="South">
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneSouthIn"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="LaneSouthOut"/>
+  </roadsegment>
+  <roadsegment
+      name="Intersection">
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneWE"/>
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneWS"/>
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneES"/>
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneSW"/>
+    <forward
+        xsi:type="testcase:Lane"
+        name="LaneSE"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="LaneEW"/>
+  </roadsegment>
+  <frame>
+    <state/>
+  </frame>
+</testcase:Scenario>
