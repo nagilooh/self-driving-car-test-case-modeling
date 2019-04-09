@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/hu.bme.mit.inf.testcase.graph.model/src" modelPluginID="hu.bme.mit.inf.testcase.graph.model"
+    modelName="Testcase" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>testtrack.ecore</foreignModel>
+  <genPackages prefix="Testcase" disposableProviderFactory="true" ecorePackage="testtrack.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="testtrack.ecore#//ActorType">
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/CAR"/>
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/BUS"/>
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/BYCYCLE"/>
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/MOTORCYCLE"/>
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/GOLFCART"/>
+      <genEnumLiterals ecoreEnumLiteral="testtrack.ecore#//ActorType/PEDESTRIAN"/>
+    </genEnums>
+    <genClasses ecoreClass="testtrack.ecore#//Scenario">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//Scenario/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//Scenario/actor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Scenario/SUT"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//Scenario/roadsegment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//Scenario/frame"/>
+    </genClasses>
+    <genClasses ecoreClass="testtrack.ecore#//RoadSegment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//RoadSegment/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadSegment/sign"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadSegment/leftNeighborOfNeighbor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadSegment/rightNeighborOfNeighbor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadSegment/forward"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadSegment/backward"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="testtrack.ecore#//Sign">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//Sign/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Sign/forRoadComponent"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="testtrack.ecore#//RoadComponent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//RoadComponent/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/leftLane"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/rightLane"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/left"/>
+    </genClasses>
+    <genClasses ecoreClass="testtrack.ecore#//Crosswalk"/>
+    <genClasses ecoreClass="testtrack.ecore#//StopSign"/>
+    <genClasses ecoreClass="testtrack.ecore#//GiveWaySign"/>
+    <genClasses ecoreClass="testtrack.ecore#//Actor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//Actor/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//Actor/name"/>
+    </genClasses>
+    <genClasses ecoreClass="testtrack.ecore#//Sidewalk"/>
+    <genClasses ecoreClass="testtrack.ecore#//Lane">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//Lane/straight"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Lane/fromLane"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Lane/toLane"/>
+    </genClasses>
+    <genClasses ecoreClass="testtrack.ecore#//State">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//State/position"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//State/actor"/>
+    </genClasses>
+    <genClasses ecoreClass="testtrack.ecore#//Frame">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//Frame/state"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Frame/Next"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
