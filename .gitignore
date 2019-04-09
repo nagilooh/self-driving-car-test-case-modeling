@@ -103,3 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 /.idea/
+/.metadata/
+/hu.bme.mit.inf.testcase.graph.model.editor/
+/hu.bme.mit.inf.testcase.graph.model.edit/
+/hu.bme.mit.inf.testcase.graph.queries.validation/
