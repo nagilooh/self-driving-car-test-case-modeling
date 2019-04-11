@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="testcase" nsURI="http://inf.mit.bme.hu/testcase" nsPrefix="testcase">
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" upperBound="-1"
+        eType="#//Actor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SUT" lowerBound="1" eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roadsegment" upperBound="-1"
+        eType="#//RoadSegment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frame" upperBound="-1"
+        eType="#//Frame" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoadSegment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sign" upperBound="-1" eType="#//Sign"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftNeighborOfNeighbor"
+        eType="#//RoadSegment" eOpposite="#//RoadSegment/rightNeighborOfNeighbor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightNeighborOfNeighbor"
+        eType="#//RoadSegment" eOpposite="#//RoadSegment/leftNeighborOfNeighbor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forward" upperBound="-1"
+        eType="#//RoadComponent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="backward" upperBound="-1"
+        eType="#//RoadComponent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sign" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forRoadComponent" eType="#//RoadComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoadComponent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftLane" eType="#//RoadComponent"
+        eOpposite="#//RoadComponent/rightLane"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightLane" eType="#//RoadComponent"
+        eOpposite="#//RoadComponent/leftLane"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//RoadComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Crosswalk" eSuperTypes="#//Sign"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StopSign" eSuperTypes="#//Sign"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GiveWaySign" eSuperTypes="#//Sign"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ActorType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sidewalk" eSuperTypes="#//RoadComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Lane" eSuperTypes="#//RoadComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="straight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromLane" upperBound="-1"
+        eType="#//Lane" eOpposite="#//Lane/toLane"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toLane" upperBound="-1"
+        eType="#//Lane" eOpposite="#//Lane/fromLane"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ActorType">
+    <eLiterals name="CAR"/>
+    <eLiterals name="BUS" value="1"/>
+    <eLiterals name="BYCYCLE" value="2"/>
+    <eLiterals name="MOTORCYCLE" value="3"/>
+    <eLiterals name="GOLFCART" value="4"/>
+    <eLiterals name="PEDESTRIAN" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//RoadComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" lowerBound="1" eType="#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Frame">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Next" eType="#//Frame"/>
+  </eClassifiers>
+</ecore:EPackage>

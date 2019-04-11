@@ -47,18 +47,20 @@ class DrawableRoadsegment(Drawable):
         Drawable.__init__(self)
 
     def draw(self, target):
-        for component in self.data.roadcomponent:
+        for component in self.data.forward:
+            component.drawable.draw(target)
+        for component in self.data.backward:
             component.drawable.draw(target)
         for sign in self.data.sign:
             sign.drawable.draw(target)
 
 
-def is_intersection(segment):
-    for component in segment.data.roadcomponent:
-        if hasattr(component, "straight"):
-            if not component.straight:
-                return True
-    return False
+# def is_intersection(segment):
+#     for component in segment.data.roadcomponent:
+#         if hasattr(component, "straight"):
+#             if not component.straight:
+#                 return True
+#     return False
 
 
 class DrawableRoadcomponent(Drawable):
@@ -203,18 +205,22 @@ def set_road_direction(component, direction_beginning=None, direction_end=None):
     set_road_figure(component)
 
     if component.leftLane is not None:
-        if hasattr(component, 'reverse') and hasattr(component.leftLane, 'reverse') and \
-                component.reverse != component.leftLane.reverse:
-            set_road_direction(component.leftLane, direction_beginning=(component.direction_beginning + 180) % 360)
-        else:
-            set_road_direction(component.leftLane, direction_beginning=component.direction_beginning % 360)
+        # if hasattr(component, 'reverse') and hasattr(component.leftLane, 'reverse') and \
+        #         component.reverse != component.leftLane.reverse:
+        #     set_road_direction(component.leftLane, direction_beginning=(component.direction_beginning + 180) % 360)
+        # else:
+        set_road_direction(component.leftLane, direction_beginning=component.direction_beginning % 360)
 
     if component.rightLane is not None:
-        if hasattr(component, 'reverse') and hasattr(component.rightLane, 'reverse') and \
-                component.reverse != component.rightLane.reverse:
-            set_road_direction(component.rightLane, direction_beginning=(component.direction_beginning + 180) % 360)
-        else:
-            set_road_direction(component.rightLane, direction_beginning=component.direction_beginning % 360)
+        # if hasattr(component, 'reverse') and hasattr(component.rightLane, 'reverse') and \
+        #         component.reverse != component.rightLane.reverse:
+        #     set_road_direction(component.rightLane, direction_beginning=(component.direction_beginning + 180) % 360)
+        # else:
+        set_road_direction(component.rightLane, direction_beginning=component.direction_beginning % 360)
+
+    if component.left is not None:
+        set_road_direction(component.left, direction_beginning=(component.direction_beginning + 180) % 360)
+
     if hasattr(component, 'straight'):
         for lane in component.toLane:
             set_road_direction(lane, direction_beginning=component.direction_end)
@@ -238,8 +244,9 @@ def set_tolane_position(component, toLane):
                                                           int(component.drawable.figure.height) -
                                                           int(toLane.drawable.figure.height))
                 else:
-                    print("Error! Lane turn weird e.g. turns 180°")
+                    print("Error! Lane turn weird e.g. turns 180 1°")
             elif toLane.direction_beginning % 360 == 180:
+                # print(component.name, component.direction_beginning, component.direction_end, toLane.name, toLane.direction_beginning, toLane.direction_end)
                 if (toLane.direction_end % 360 == 180 or toLane.direction_end % 360 == 270) \
                       and (component.direction_beginning % 360 == 180 or component.direction_beginning % 360 == 90):
                     start_pos = component.startPos + Vec2(- int(toLane.drawable.figure.width), 0)
@@ -248,7 +255,7 @@ def set_tolane_position(component, toLane):
                                                           int(component.drawable.figure.height) -
                                                           int(toLane.drawable.figure.height))
                 else:
-                    print("Error! Lane turn weird e.g. turns 180°")
+                    print("Error! Lane turn weird e.g. turns 180° 2")
             elif toLane.direction_beginning % 360 == 270:
                 if (toLane.direction_end % 360 == 270 or toLane.direction_end % 360 == 0) \
                    and (component.direction_beginning % 360 == 270 or component.direction_beginning % 360 == 180):
@@ -258,7 +265,7 @@ def set_tolane_position(component, toLane):
                                                           int(toLane.drawable.figure.width),
                                                           int(component.drawable.figure.height))
                 else:
-                    print("Error! Lane turn weird e.g. turns 180°")
+                    print("Error! Lane turn weird e.g. turns 180° 3")
             elif toLane.direction_beginning % 360 == 90:
                 if (toLane.direction_end % 360 == 90 or toLane.direction_end % 360 == 0) \
                      and (component.direction_beginning % 360 == 90 or component.direction_beginning % 360 == 180):
@@ -268,7 +275,7 @@ def set_tolane_position(component, toLane):
                                                           int(toLane.drawable.figure.width),
                                                           - int(toLane.drawable.figure.height))
                 else:
-                    print("Error! Lane turn weird e.g. turns 180°")
+                    print("Error! Lane turn weird e.g. turns 180° 4")
             set_road_position(toLane, start_pos)
 
 
@@ -288,7 +295,7 @@ def set_fromlane_position(component, fromLane):
                                                       int(component.drawable.figure.height) -
                                                       int(fromLane.drawable.figure.height))
             else:
-                print("Error! Lane turn weird e.g. turns 180°")
+                print("Error! Lane turn weird e.g. turns 180° 5")
         elif fromLane.direction_end % 360 == 180:
             if (component.direction_end % 360 == 180 or component.direction_end % 360 == 270) \
                     and (fromLane.direction_beginning % 360 == 180 or fromLane.direction_beginning % 360 == 90):
@@ -298,7 +305,7 @@ def set_fromlane_position(component, fromLane):
                                                       int(component.drawable.figure.height) -
                                                       int(fromLane.drawable.figure.height))
             else:
-                print("Error! Lane turn weird e.g. turns 180°")
+                print("Error! Lane turn weird e.g. turns 180° 6")
         elif fromLane.direction_end % 360 == 270:
             if (component.direction_end % 360 == 270 or component.direction_end % 360 == 0) \
                     and (fromLane.direction_beginning % 360 == 270 or fromLane.direction_beginning % 360 == 180):
@@ -308,7 +315,7 @@ def set_fromlane_position(component, fromLane):
                                                       int(fromLane.drawable.figure.width),
                                                       - int(fromLane.drawable.figure.height))
             else:
-                print("Error! Lane turn weird e.g. turns 180°")
+                print("Error! Lane turn weird e.g. turns 180° 7")
         elif fromLane.direction_end % 360 == 90:
             if (component.direction_end % 360 == 90 or component.direction_end % 360 == 0) \
                     and (fromLane.direction_beginning % 360 == 90 or fromLane.direction_beginning % 360 == 180):
@@ -318,8 +325,34 @@ def set_fromlane_position(component, fromLane):
                                                       int(fromLane.drawable.figure.width),
                                                       int(component.drawable.figure.height))
             else:
-                print("Error! Lane turn weird e.g. turns 180°")
+                print("Error! Lane turn weird e.g. turns 180° 8")
         set_road_position(fromLane, start_pos)
+
+
+def set_left_lane_position(component, left_lane):
+    start_pos = None
+    if component.direction_beginning % 360 == 0:
+        start_pos = component.startPos - Vec2(0, int(left_lane.drawable.figure.height))
+    elif component.direction_beginning % 360 == 180:
+        start_pos = component.startPos + Vec2(0, int(left_lane.drawable.figure.height))
+    elif component.direction_beginning % 360 == 90:
+        start_pos = component.startPos - Vec2(int(left_lane.drawable.figure.width), 0)
+    elif component.direction_beginning % 360 == 270:
+        start_pos = component.startPos + Vec2(int(left_lane.drawable.figure.width), 0)
+    set_road_position(left_lane, start_pos)
+
+
+def set_right_lane_position(component, right_lane):
+    start_pos = None
+    if component.direction_beginning % 360 == 0:
+        start_pos = component.startPos + Vec2(0, int(right_lane.drawable.figure.height))
+    elif component.direction_beginning % 360 == 180:
+        start_pos = component.startPos - Vec2(0, int(right_lane.drawable.figure.height))
+    elif component.direction_beginning % 360 == 90:
+        start_pos = component.startPos + Vec2(int(right_lane.drawable.figure.width), 0)
+    elif component.direction_beginning % 360 == 270:
+        start_pos = component.startPos - Vec2(int(right_lane.drawable.figure.width), 0)
+    set_road_position(right_lane, start_pos)
 
 
 # For RoadComponents (Lanes and Sidewalks)
@@ -339,51 +372,53 @@ def set_road_position(component, start_pos):
                 # else:
                 #     set_fromlane_position(component, toLane)
 
-                start_pos = None
-                if toLane.direction_beginning % 360 == component.direction_end % 360 \
-                        and toLane.direction_end % 360 == (component.direction_beginning + 180) % 360:
-                    print("Error! Turning lane cannot be followed by a lane turning in the opposite direction.")
-                elif toLane.direction_beginning % 360 == 0:
-                    if (toLane.direction_end % 360 == 0 or toLane.direction_end % 360 == 270) \
-                            and (component.direction_beginning % 360 == 0 or component.direction_beginning % 360 == 90):
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width), 0)
-                    elif toLane.direction_end % 360 == 90 or component.direction_beginning % 360 == 270:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width),
-                                                              int(component.drawable.figure.height) -
-                                                              int(toLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°1")
-                elif toLane.direction_beginning % 360 == 180:
-                    if (toLane.direction_end % 360 == 180 or toLane.direction_end % 360 == 270) \
-                          and (component.direction_beginning % 360 == 180 or component.direction_beginning % 360 == 90):
-                        start_pos = component.startPos + Vec2(- int(toLane.drawable.figure.width), 0)
-                    elif toLane.direction_end % 360 == 90 or component.direction_beginning % 360 == 270:
-                        start_pos = component.startPos + Vec2(- int(toLane.drawable.figure.width),
-                                                              int(component.drawable.figure.height) -
-                                                              int(toLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°2")
-                elif toLane.direction_beginning % 360 == 270:
-                    if (toLane.direction_end % 360 == 270 or toLane.direction_end % 360 == 0) \
-                       and (component.direction_beginning % 360 == 270 or component.direction_beginning % 360 == 180):
-                        start_pos = component.startPos + Vec2(0, int(component.drawable.figure.height))
-                    elif toLane.direction_end % 360 == 180 or component.direction_beginning % 360 == 0:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
-                                                              int(toLane.drawable.figure.width),
-                                                              int(component.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°3")
-                elif toLane.direction_beginning % 360 == 90:
-                    if (toLane.direction_end % 360 == 90 or toLane.direction_end % 360 == 0) \
-                         and (component.direction_beginning % 360 == 90 or component.direction_beginning % 360 == 180):
-                        start_pos = component.startPos + Vec2(0, - int(toLane.drawable.figure.height))
-                    elif toLane.direction_end == 180 or component.direction_beginning % 360 == 0:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
-                                                              int(toLane.drawable.figure.width),
-                                                              - int(toLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°4")
-                set_road_position(toLane, start_pos)
+                set_tolane_position(component, toLane)
+
+                # start_pos = None
+                # if toLane.direction_beginning % 360 == component.direction_end % 360 \
+                #         and toLane.direction_end % 360 == (component.direction_beginning + 180) % 360:
+                #     print("Error! Turning lane cannot be followed by a lane turning in the opposite direction.")
+                # elif toLane.direction_beginning % 360 == 0:
+                #     if (toLane.direction_end % 360 == 0 or toLane.direction_end % 360 == 270) \
+                #             and (component.direction_beginning % 360 == 0 or component.direction_beginning % 360 == 90):
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width), 0)
+                #     elif toLane.direction_end % 360 == 90 or component.direction_beginning % 360 == 270:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width),
+                #                                               int(component.drawable.figure.height) -
+                #                                               int(toLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°1")
+                # elif toLane.direction_beginning % 360 == 180:
+                #     if (toLane.direction_end % 360 == 180 or toLane.direction_end % 360 == 270) \
+                #           and (component.direction_beginning % 360 == 180 or component.direction_beginning % 360 == 90):
+                #         start_pos = component.startPos + Vec2(- int(toLane.drawable.figure.width), 0)
+                #     elif toLane.direction_end % 360 == 90 or component.direction_beginning % 360 == 270:
+                #         start_pos = component.startPos + Vec2(- int(toLane.drawable.figure.width),
+                #                                               int(component.drawable.figure.height) -
+                #                                               int(toLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°2")
+                # elif toLane.direction_beginning % 360 == 270:
+                #     if (toLane.direction_end % 360 == 270 or toLane.direction_end % 360 == 0) \
+                #        and (component.direction_beginning % 360 == 270 or component.direction_beginning % 360 == 180):
+                #         start_pos = component.startPos + Vec2(0, int(component.drawable.figure.height))
+                #     elif toLane.direction_end % 360 == 180 or component.direction_beginning % 360 == 0:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
+                #                                               int(toLane.drawable.figure.width),
+                #                                               int(component.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°3")
+                # elif toLane.direction_beginning % 360 == 90:
+                #     if (toLane.direction_end % 360 == 90 or toLane.direction_end % 360 == 0) \
+                #          and (component.direction_beginning % 360 == 90 or component.direction_beginning % 360 == 180):
+                #         start_pos = component.startPos + Vec2(0, - int(toLane.drawable.figure.height))
+                #     elif toLane.direction_end == 180 or component.direction_beginning % 360 == 0:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
+                #                                               int(toLane.drawable.figure.width),
+                #                                               - int(toLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°4")
+                # set_road_position(toLane, start_pos)
 
             for fromLane in component.fromLane:
                 # if not component.reverse:
@@ -391,113 +426,94 @@ def set_road_position(component, start_pos):
                 # else:
                 #     set_tolane_position(component, component.fromLane)
 
-                start_pos = None
-                if fromLane.direction_end % 360 == component.direction_beginning % 360 \
-                        and fromLane.direction_beginning % 360 == (component.direction_end + 180) % 360:
-                    print("Error! Turning lane cannot be followed by a lane turning in the opposite direction.")
-                if fromLane.direction_end % 360 == 0:
-                    if (component.direction_end % 360 == 0 or component.direction_end % 360 == 270) \
-                            and (fromLane.direction_beginning % 360 == 0 or fromLane.direction_beginning % 360 == 90):
-                        start_pos = component.startPos + Vec2(- int(fromLane.drawable.figure.width), 0)
-                    elif component.direction_end % 360 == 90 or fromLane.direction_beginning % 360 == 270:
-                        start_pos = component.startPos + Vec2(- int(fromLane.drawable.figure.width),
-                                                              int(component.drawable.figure.height) -
-                                                              int(fromLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°")
-                elif fromLane.direction_end % 360 == 180:
-                    if (component.direction_end % 360 == 180 or component.direction_end % 360 == 270) \
-                          and (fromLane.direction_beginning % 360 == 180 or fromLane.direction_beginning % 360 == 90):
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width), 0)
-                    elif component.direction_end % 360 == 90 or fromLane.direction_beginning % 360 == 270:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width),
-                                                              int(component.drawable.figure.height) -
-                                                              int(fromLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°")
-                elif fromLane.direction_end % 360 == 270:
-                    if (component.direction_end % 360 == 270 or component.direction_end % 360 == 0) \
-                       and (fromLane.direction_beginning % 360 == 270 or fromLane.direction_beginning % 360 == 180):
-                        start_pos = component.startPos + Vec2(0, - int(fromLane.drawable.figure.height))
-                    elif component.direction_end % 360 == 180 or fromLane.direction_beginning % 360 == 0:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
-                                                              int(fromLane.drawable.figure.width),
-                                                              - int(fromLane.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°")
-                elif fromLane.direction_end % 360 == 90:
-                    if (component.direction_end % 360 == 90 or component.direction_end % 360 == 0) \
-                         and (fromLane.direction_beginning % 360 == 90 or fromLane.direction_beginning % 360 == 180):
-                        start_pos = component.startPos + Vec2(0, int(component.drawable.figure.height))
-                    elif component.direction_end == 180 or fromLane.direction_beginning % 360 == 0:
-                        start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
-                                                              int(fromLane.drawable.figure.width),
-                                                              int(component.drawable.figure.height))
-                    else:
-                        print("Error! Lane turn weird e.g. turns 180°")
-                set_road_position(fromLane, start_pos)
+                set_fromlane_position(component, fromLane)
 
-            if component.leftLane is not None:
-                if not component.straight:
-                    print("Error! Only straight lanes can have leftLane attribute.")
-                else:
-                    start_pos = None
-                    if not component.reverse:
-                        start_pos = get_left_lane_position(component, component.leftLane)
-                    else:
-                        start_pos = get_right_lane_position(component, component.leftLane)
+                # start_pos = None
+                # if fromLane.direction_end % 360 == component.direction_beginning % 360 \
+                #         and fromLane.direction_beginning % 360 == (component.direction_end + 180) % 360:
+                #     print("Error! Turning lane cannot be followed by a lane turning in the opposite direction.")
+                # if fromLane.direction_end % 360 == 0:
+                #     if (component.direction_end % 360 == 0 or component.direction_end % 360 == 270) \
+                #             and (fromLane.direction_beginning % 360 == 0 or fromLane.direction_beginning % 360 == 90):
+                #         start_pos = component.startPos + Vec2(- int(fromLane.drawable.figure.width), 0)
+                #     elif component.direction_end % 360 == 90 or fromLane.direction_beginning % 360 == 270:
+                #         start_pos = component.startPos + Vec2(- int(fromLane.drawable.figure.width),
+                #                                               int(component.drawable.figure.height) -
+                #                                               int(fromLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°")
+                # elif fromLane.direction_end % 360 == 180:
+                #     if (component.direction_end % 360 == 180 or component.direction_end % 360 == 270) \
+                #           and (fromLane.direction_beginning % 360 == 180 or fromLane.direction_beginning % 360 == 90):
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width), 0)
+                #     elif component.direction_end % 360 == 90 or fromLane.direction_beginning % 360 == 270:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width),
+                #                                               int(component.drawable.figure.height) -
+                #                                               int(fromLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°")
+                # elif fromLane.direction_end % 360 == 270:
+                #     if (component.direction_end % 360 == 270 or component.direction_end % 360 == 0) \
+                #        and (fromLane.direction_beginning % 360 == 270 or fromLane.direction_beginning % 360 == 180):
+                #         start_pos = component.startPos + Vec2(0, - int(fromLane.drawable.figure.height))
+                #     elif component.direction_end % 360 == 180 or fromLane.direction_beginning % 360 == 0:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
+                #                                               int(fromLane.drawable.figure.width),
+                #                                               - int(fromLane.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°")
+                # elif fromLane.direction_end % 360 == 90:
+                #     if (component.direction_end % 360 == 90 or component.direction_end % 360 == 0) \
+                #          and (fromLane.direction_beginning % 360 == 90 or fromLane.direction_beginning % 360 == 180):
+                #         start_pos = component.startPos + Vec2(0, int(component.drawable.figure.height))
+                #     elif component.direction_end == 180 or fromLane.direction_beginning % 360 == 0:
+                #         start_pos = component.startPos + Vec2(int(component.drawable.figure.width) -
+                #                                               int(fromLane.drawable.figure.width),
+                #                                               int(component.drawable.figure.height))
+                #     else:
+                #         print("Error! Lane turn weird e.g. turns 180°")
+                # set_road_position(fromLane, start_pos)
 
-                    # if component.direction_beginning % 360 == 0:
-                    #     start_pos = component.startPos - Vec2(0, int(component.leftLane.drawable.figure.height))
-                    # elif component.direction_beginning % 360 == 180:
-                    #     start_pos = component.startPos + Vec2(0, int(component.leftLane.drawable.figure.height))
-                    # elif component.direction_beginning % 360 == 90:
-                    #     start_pos = component.startPos - Vec2(int(component.leftLane.drawable.figure.width), 0)
-                    # elif component.direction_beginning % 360 == 270:
-                    #     start_pos = component.startPos + Vec2(int(component.leftLane.drawable.figure.width), 0)
-                    set_road_position(component.leftLane, start_pos)
+        if component.leftLane is not None:
+            # start_pos = None
+            # if not component.reverse:
+            set_left_lane_position(component, component.leftLane)
+            # else:
+            #     set_right_lane_position(component, component.leftLane)
 
-            if component.rightLane is not None:
-                if not component.straight:
-                    print("Error! Only straight lanes can have rightLane attribute.")
-                else:
-                    start_pos = None
-                    if not component.reverse:
-                        start_pos = get_right_lane_position(component, component.rightLane)
-                    else:
-                        start_pos = get_left_lane_position(component, component.rightLane)
+            # if component.direction_beginning % 360 == 0:
+            #     start_pos = component.startPos - Vec2(0, int(component.leftLane.drawable.figure.height))
+            # elif component.direction_beginning % 360 == 180:
+            #     start_pos = component.startPos + Vec2(0, int(component.leftLane.drawable.figure.height))
+            # elif component.direction_beginning % 360 == 90:
+            #     start_pos = component.startPos - Vec2(int(component.leftLane.drawable.figure.width), 0)
+            # elif component.direction_beginning % 360 == 270:
+            #     start_pos = component.startPos + Vec2(int(component.leftLane.drawable.figure.width), 0)
 
-                    # if component.direction_beginning % 360 == 0:
-                    #     start_pos = component.startPos + Vec2(0, int(component.rightLane.drawable.figure.height))
-                    # elif component.direction_beginning % 360 == 180:
-                    #     start_pos = component.startPos - Vec2(0, int(component.rightLane.drawable.figure.height))
-                    # elif component.direction_beginning % 360 == 90:
-                    #     start_pos = component.startPos + Vec2(int(component.rightLane.drawable.figure.width), 0)
-                    # elif component.direction_beginning % 360 == 270:
-                    #     start_pos = component.startPos - Vec2(int(component.rightLane.drawable.figure.width), 0)
-                    set_road_position(component.rightLane, start_pos)
+        if component.rightLane is not None:
+            if not component.straight:
+                print("Error! Only straight lanes can have rightLane attribute.")
+            else:
+                # start_pos = None
+                # if not component.reverse:
+                set_right_lane_position(component, component.rightLane)
+                # else:
+                #     start_pos = set_left_lane_position(component, component.rightLane)
 
+                # if component.direction_beginning % 360 == 0:
+                #     start_pos = component.startPos + Vec2(0, int(component.rightLane.drawable.figure.height))
+                # elif component.direction_beginning % 360 == 180:
+                #     start_pos = component.startPos - Vec2(0, int(component.rightLane.drawable.figure.height))
+                # elif component.direction_beginning % 360 == 90:
+                #     start_pos = component.startPos + Vec2(int(component.rightLane.drawable.figure.width), 0)
+                # elif component.direction_beginning % 360 == 270:
+                #     start_pos = component.startPos - Vec2(int(component.rightLane.drawable.figure.width), 0)
+                # set_road_position(component.rightLane, start_pos)
 
-def get_left_lane_position(component, left_lane):
-    if component.direction_beginning % 360 == 0:
-        return component.startPos - Vec2(0, int(left_lane.drawable.figure.height))
-    elif component.direction_beginning % 360 == 180:
-        return component.startPos + Vec2(0, int(left_lane.drawable.figure.height))
-    elif component.direction_beginning % 360 == 90:
-        return component.startPos - Vec2(int(left_lane.drawable.figure.width), 0)
-    elif component.direction_beginning % 360 == 270:
-        return component.startPos + Vec2(int(left_lane.drawable.figure.width), 0)
-
-
-def get_right_lane_position(component, right_lane):
-    if component.direction_beginning % 360 == 0:
-        return component.startPos + Vec2(0, int(right_lane.drawable.figure.height))
-    elif component.direction_beginning % 360 == 180:
-        return component.startPos - Vec2(0, int(right_lane.drawable.figure.height))
-    elif component.direction_beginning % 360 == 90:
-        return component.startPos + Vec2(int(right_lane.drawable.figure.width), 0)
-    elif component.direction_beginning % 360 == 270:
-        return component.startPos - Vec2(int(right_lane.drawable.figure.width), 0)
+        if component.left is not None:
+            # start_pos = None
+            # if not component.reverse:
+            set_left_lane_position(component, component.left)
 
 
 def set_sign_figure(sign):
@@ -547,7 +563,12 @@ def move_to_zero(root):
     min_x = 0
     min_y = 0
     for segment in root.roadsegment:
-        for component in segment.roadcomponent:
+        for component in segment.forward:
+            if component.startPos.x < min_x:
+                min_x = component.startPos.x
+            if component.startPos.y < min_y:
+                min_y = component.startPos.y
+        for component in segment.backward:
             if component.startPos.x < min_x:
                 min_x = component.startPos.x
             if component.startPos.y < min_y:
@@ -556,7 +577,9 @@ def move_to_zero(root):
     min_y -= 50
     if min_x < 0 or min_y < 0:
         for segment in root.roadsegment:
-            for component in segment.roadcomponent:
+            for component in segment.forward:
+                component.startPos = component.startPos - Vec2(min_x, min_y)
+            for component in segment.backward:
                 component.startPos = component.startPos - Vec2(min_x, min_y)
             for sign in segment.sign:
                 sign.startPos = sign.startPos - Vec2(min_x, min_y)
@@ -566,7 +589,12 @@ def get_size(root):
     max_x = 0
     max_y = 0
     for segment in root.roadsegment:
-        for component in segment.roadcomponent:
+        for component in segment.forward:
+            if component.startPos.x + int(component.drawable.figure.width) > max_x:
+                max_x = component.startPos.x + int(component.drawable.figure.width)
+            if component.startPos.y + int(component.drawable.figure.height) > max_y:
+                max_y = component.startPos.y + int(component.drawable.figure.height)
+        for component in segment.backward:
             if component.startPos.x + int(component.drawable.figure.width) > max_x:
                 max_x = component.startPos.x + int(component.drawable.figure.width)
             if component.startPos.y + int(component.drawable.figure.height) > max_y:
@@ -581,7 +609,12 @@ def load_model(root):
         drawable_segment.data = segment
         segment.drawable = drawable_segment
         # print("Road:\t\t", segment)
-        for component in segment.roadcomponent:
+        for component in segment.forward:
+            component.segment = segment
+            drawable_component = Drawable()
+            drawable_component.data = component
+            component.drawable = drawable_component
+        for component in segment.backward:
             component.segment = segment
             drawable_component = Drawable()
             drawable_component.data = component
@@ -597,8 +630,8 @@ def load_model(root):
         actor.drawable = drawable_actor
         set_actor_figure(actor)
 
-    set_road_direction(root.roadsegment[0].roadcomponent[0], direction_beginning=0)
-    set_road_position(root.roadsegment[0].roadcomponent[0], start_pos=Vec2(0, 0))
+    set_road_direction(root.roadsegment[0].forward[0], direction_beginning=0)
+    set_road_position(root.roadsegment[0].forward[0], start_pos=Vec2(0, 0))
 
     for segment in root.roadsegment:
         for sign in segment.sign:
@@ -639,7 +672,8 @@ def main():
     # Load drawing assets
 
     # metamodel_name = "metamodel.ecore"
-    metamodel_name = "testtrack_modeling_dynamic.ecore"
+    # metamodel_name = "testtrack_modeling_dynamic.ecore"
+    metamodel_name = "testtrack.ecore"
     # model_name = "model.xmi"
     # model_name = "crosswalk_double_lane.testtrack_modeling_dynamic"
     # model_name = "stopped_car_straight_double_lane_single_sidewalk.testtrack_modeling_dynamic"
@@ -651,7 +685,7 @@ def main():
 
     model_names = []
     os.chdir("./input")
-    for file in glob.glob("*.testtrack_modeling_dynamic"):
+    for file in glob.glob("*.xmi"):
         model_names.append(file)
     rset = ResourceSet()
     resource = rset.get_resource(metamodel_name)
