@@ -4,17 +4,26 @@
       <query-specification fqn="queries.leadsToItself"/>
       <query-specification fqn="queries.nextToItself"/>
       <query-specification fqn="queries.nextToCycle"/>
+      <query-specification fqn="queries.nextToFollowingLane"/>
+      <query-specification fqn="queries.turningLaneHasLeftLane"/>
+      <query-specification fqn="queries.turningLaneHasRightLane"/>
+      <query-specification fqn="queries.sidewalkNotOnRightSide"/>
       <query-specification fqn="queries.rightLane"/>
       <query-specification fqn="queries.leftLane"/>
       <query-specification fqn="queries.crossConnection"/>
-      <query-specification fqn="queries.laneInWrongSegment"/>
+      <query-specification fqn="queries.laneInWrongSegmentOrDirection"/>
       <query-specification fqn="queries.lanesInSameSegmentAndDirection"/>
-      <query-specification fqn="queries.lanesInSameSegmentOpoositeDirection"/>
+      <query-specification fqn="queries.lanesInSameSegmentOppositeDirection"/>
       <query-specification fqn="queries.reachableTroughRightLane"/>
       <query-specification fqn="queries.segmentHasUnconnectedLanesInSameDirection"/>
-      <query-specification fqn="queries.lanesLeftOfToEachOther"/>
-      <query-specification fqn="queries.oppositeLanesNotNextToEachOther"/>
-      <query-specification fqn="queries.notLeftmostLaneNextToOtherDirection"/>
+      <query-specification fqn="queries.lanesConnectToDifferentDirectionsInSameSegment"/>
+      <query-specification fqn="queries.actorHasMultipleStatesInFrame"/>
+      <query-specification fqn="queries.nextFrameCycle"/>
+      <query-specification fqn="queries.nextFrame"/>
+      <query-specification fqn="queries.multipleCrosswalksOnLane"/>
+      <query-specification fqn="queries.multipleStopSignsOnLane"/>
+      <query-specification fqn="queries.multipleGiveWaySignsOnLane"/>
+      <query-specification fqn="queries.giveWaySignAndStopSignOnLane"/>
       <query-specification fqn="queries.turnFollowingTurn"/>
     </group>
   </extension>

@@ -15,13 +15,11 @@
     <forward
         xsi:type="testcase:Lane"
         name="LaneWestIn"
-        left="//@roadsegment.0/@backward.0"
         straight="true"
         toLane="//@roadsegment.3/@forward.0 //@roadsegment.3/@forward.1"/>
     <backward
         xsi:type="testcase:Lane"
         name="LaneWestOut"
-        left="//@roadsegment.0/@forward.0"
         straight="true"
         fromLane="//@roadsegment.3/@forward.3 //@roadsegment.3/@backward.0"/>
   </roadsegment>
@@ -32,13 +30,11 @@
     <forward
         xsi:type="testcase:Lane"
         name="LaneEastIn"
-        left="//@roadsegment.1/@backward.0"
         straight="true"
         toLane="//@roadsegment.3/@forward.2 //@roadsegment.3/@backward.0"/>
     <backward
         xsi:type="testcase:Lane"
         name="LaneEastOut"
-        left="//@roadsegment.1/@forward.0"
         straight="true"
         fromLane="//@roadsegment.3/@forward.4 //@roadsegment.3/@forward.0"/>
   </roadsegment>
@@ -49,13 +45,11 @@
     <forward
         xsi:type="testcase:Lane"
         name="LaneSouthIn"
-        left="//@roadsegment.2/@backward.0"
         straight="true"
         toLane="//@roadsegment.3/@forward.3 //@roadsegment.3/@forward.4"/>
     <backward
         xsi:type="testcase:Lane"
         name="LaneSouthOut"
-        left="//@roadsegment.2/@forward.0"
         straight="true"
         fromLane="//@roadsegment.3/@forward.1 //@roadsegment.3/@forward.2"/>
   </roadsegment>

@@ -23,6 +23,37 @@ pattern nextToCycle(lane: RoadComponent) {
 	find rightLane+(lane,lane);
 }
 
+@Constraint(severity = "error",
+            message = "The lanes have toLane/fromLane AND leftLane/rightLane references between them",
+            key = {lane1, lane2})
+pattern nextToFollowingLane(lane1: Lane, lane2: Lane) {
+	find rightLane+(lane1,lane2);
+	Lane.toLane(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "Turning lane can't have leftLane",
+            key = {lane1, lane2})
+pattern turningLaneHasLeftLane(lane1: Lane, lane2: RoadComponent) {
+	Lane.straight(lane1, false);
+	RoadComponent.leftLane(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "Turning lane can't have rightLane",
+            key = {lane1, lane2})
+pattern turningLaneHasRightLane(lane1: Lane, lane2: RoadComponent) {
+	Lane.straight(lane1, false);
+	RoadComponent.rightLane(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "Sidewalk is not on the side",
+            key = {sidewalk})
+pattern sidewalkNotOnRightSide(sidewalk: Sidewalk) {
+	RoadComponent.rightLane(sidewalk, _other);
+}
+
 pattern rightLane(l1: RoadComponent, l2: RoadComponent){
 	RoadComponent.rightLane(l1, l2);
 }
@@ -35,39 +66,42 @@ pattern leftLane(l1: RoadComponent, l2: RoadComponent){
             message = "A parallel pair of lanes cross while connecting to an other parallel pair of lanes",
             key = {lane1, lane2})
 pattern crossConnection(lane1: Lane, lane2: Lane, lane3: Lane, lane4: Lane) {
-	//RoadComponent.rightLane(lane1, lane2);
-	//RoadComponent.rightLane(lane3, lane4);
 	find rightLane+(lane1, lane2);
-	find rightLane+(lane4, lane3);
-	Lane.toLane(lane1, lane3);
-	Lane.toLane(lane2, lane4);
+	find rightLane+(lane3, lane4);
+	Lane.toLane(lane1, lane4);
+	Lane.toLane(lane2, lane3);
 }
 
+//@Constraint(severity = "error",
+//            message = "Lane is next to a lane, that is in the other direction",
+//            key = {lane1, lane2})
+//pattern laneInWrongDirection(lane1: RoadComponent, lane2: RoadComponent) {
+//	RoadSegment.forward(segm, lane1);
+//	RoadSegment.backward(segm, lane2);
+//	RoadComponent.leftLane(lane1, lane2);
+//}
+
 @Constraint(severity = "error",
-            message = "Lane is next to a lane, that is in a different segment or other direction",
+            message = "Lane is next to a lane, that is in a different segment or different direction",
             key = {lane1, lane2})
-pattern laneInWrongSegment(lane1: RoadComponent, lane2: RoadComponent) {
+pattern laneInWrongSegmentOrDirection(lane1: RoadComponent, lane2: RoadComponent) {
 	RoadComponent.leftLane(lane1, lane2);
 	neg find lanesInSameSegmentAndDirection(_segm, lane1, lane2);
 }
 
 pattern lanesInSameSegmentAndDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
-	l1 != l2;
 	RoadSegment.forward(seg, l1);
 	RoadSegment.forward(seg, l2);
 } or {
-	l1 != l2;
 	RoadSegment.backward(seg, l1);
 	RoadSegment.backward(seg, l2);
 	
 }
 
-pattern lanesInSameSegmentOpoositeDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
-	l1 != l2;
+pattern lanesInSameSegmentOppositeDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
 	RoadSegment.forward(seg, l1);
 	RoadSegment.backward(seg, l2);
 } or {
-	l1 != l2;
 	RoadSegment.backward(seg, l1);
 	RoadSegment.forward(seg, l2);
 	
@@ -84,26 +118,77 @@ pattern segmentHasUnconnectedLanesInSameDirection(segm: RoadSegment) {
 	neg find reachableTroughRightLane(lane2, lane1);
 }
 
-pattern lanesLeftOfToEachOther(lane1: RoadComponent, lane2: RoadComponent) {
-	RoadComponent.left(lane1, lane2);
-	RoadComponent.left(lane2, lane1);
+@Constraint(severity = "error",
+            message = "Lanes connect to different directions in the same segment",
+            key = {lane1, lane2, lane3, lane4})
+pattern lanesConnectToDifferentDirectionsInSameSegment(lane1: Lane, lane2: Lane, lane3: Lane, lane4: Lane) {
+	lane1 != lane2;
+	find lanesInSameSegmentAndDirection(_seg1, lane1, lane2);
+	Lane.toLane(lane1, lane3);
+	Lane.toLane(lane2, lane4);
+	find lanesInSameSegmentOppositeDirection(_seg2, lane3, lane4);
 }
 
 @Constraint(severity = "error",
-            message = "The leftmost lanes of the two directions are not to the 'left' of each other",
-            key = {lane1, lane2})
-pattern oppositeLanesNotNextToEachOther(segm: RoadSegment, lane1: RoadComponent, lane2: RoadComponent) {
-	find lanesInSameSegmentOpoositeDirection(segm, lane1, lane2);
-	neg find segmentHasUnconnectedLanesInSameDirection(segm);
-	neg find lanesLeftOfToEachOther(lane1, lane2);
+            message = "Actor has multiple states in the same frame",
+            key = {frame, actor})
+pattern actorHasMultipleStatesInFrame(frame: Frame, actor: Actor) {
+	Frame.state(frame, state1);
+	Frame.state(frame, state2);
+	state1 != state2;
+	State.actor(state1, actor);
+	State.actor(state2, actor);
 }
 
 @Constraint(severity = "error",
-            message = "Not leftmost lane of a direction has a 'left' reference",
-            key = {lane})
-pattern notLeftmostLaneNextToOtherDirection(lane: Lane) {
-	find leftLane(lane, _l2);
-	RoadComponent.left(lane, _l3);
+            message = "There is a cycle of 'nextFrame' references",
+            key = {frame})
+pattern nextFrameCycle(frame: Frame) {
+	find nextFrame+(frame, frame);
+}
+
+pattern nextFrame(frame1: Frame, frame2: Frame) {
+	Frame.nextFrame(frame1, frame2);
+}
+
+
+@Constraint(severity = "error",
+            message = "Lane has more than one crosswalk",
+            key = {lane, sign1, sign2})
+pattern multipleCrosswalksOnLane(lane: RoadComponent, sign1: Crosswalk, sign2: Crosswalk) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+
+@Constraint(severity = "error",
+            message = "Lane has more than one stop sign",
+            key = {lane, sign1, sign2})
+pattern multipleStopSignsOnLane(lane: RoadComponent, sign1: StopSign, sign2: StopSign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+
+@Constraint(severity = "error",
+            message = "Lane has more than one give way sign",
+            key = {lane, sign1, sign2})
+pattern multipleGiveWaySignsOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: GiveWaySign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+
+@Constraint(severity = "error",
+            message = "Lane has give way sign and stop sign",
+            key = {lane, sign1, sign2})
+pattern giveWaySignAndStopSignOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: StopSign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
 }
 
 // If they turn in the opposite direction, I can't draw them (atm).

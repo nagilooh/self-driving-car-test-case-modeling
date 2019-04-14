@@ -37,7 +37,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute testtrack.ecore#//RoadComponent/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/leftLane"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/rightLane"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//RoadComponent/left"/>
     </genClasses>
     <genClasses ecoreClass="testtrack.ecore#//Crosswalk"/>
     <genClasses ecoreClass="testtrack.ecore#//StopSign"/>
@@ -58,7 +57,7 @@
     </genClasses>
     <genClasses ecoreClass="testtrack.ecore#//Frame">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference testtrack.ecore#//Frame/state"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Frame/Next"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference testtrack.ecore#//Frame/nextFrame"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -5,7 +5,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actor" upperBound="-1"
         eType="#//Actor" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="SUT" lowerBound="1" eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SUT" eType="#//Actor"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="roadsegment" upperBound="-1"
         eType="#//RoadSegment" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="frame" upperBound="-1"
@@ -26,7 +26,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sign" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="forRoadComponent" eType="#//RoadComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forRoadComponent" lowerBound="1"
+        eType="#//RoadComponent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RoadComponent" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -34,7 +35,6 @@
         eOpposite="#//RoadComponent/rightLane"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightLane" eType="#//RoadComponent"
         eOpposite="#//RoadComponent/leftLane"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//RoadComponent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Crosswalk" eSuperTypes="#//Sign"/>
   <eClassifiers xsi:type="ecore:EClass" name="StopSign" eSuperTypes="#//Sign"/>
@@ -68,6 +68,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Frame">
     <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
         eType="#//State" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="Next" eType="#//Frame"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextFrame" eType="#//Frame"/>
   </eClassifiers>
 </ecore:EPackage>
