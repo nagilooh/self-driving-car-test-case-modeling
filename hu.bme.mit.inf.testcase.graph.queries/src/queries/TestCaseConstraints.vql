@@ -3,7 +3,7 @@ package queries
 import "http://inf.mit.bme.hu/testcase"
 
 @Constraint(severity = "error",
-            message = "The 'toLane reference of the lane points to itself",
+            message = "The 'toLane' reference of the lane points to itself",
             key = {lane})
 pattern leadsToItself(lane: Lane) {
 	Lane.toLane(lane, lane);
@@ -60,6 +60,14 @@ pattern rightLane(l1: RoadComponent, l2: RoadComponent){
 
 pattern leftLane(l1: RoadComponent, l2: RoadComponent){
 	RoadComponent.leftLane(l1, l2);
+}
+
+pattern toLane(l1: Lane, l2: Lane){
+	Lane.toLane(l1, l2);
+}
+
+pattern fromLane(l1: Lane, l2: Lane){
+	Lane.fromLane(l1, l2);
 }
 
 @Constraint(severity = "error",
@@ -129,6 +137,16 @@ pattern lanesConnectToDifferentDirectionsInSameSegment(lane1: Lane, lane2: Lane,
 	find lanesInSameSegmentOppositeDirection(_seg2, lane3, lane4);
 }
 
+// TODO
+//pattern fromLaneOfTurnInSameSegment(lane1: Lane, lane2: Lane) {
+//	
+//}
+
+// TODO
+//pattern toLaneofTurnInSameSegment() {
+//	
+//}
+
 @Constraint(severity = "error",
             message = "Actor has multiple states in the same frame",
             key = {frame, actor})
@@ -189,6 +207,38 @@ pattern giveWaySignAndStopSignOnLane(lane: RoadComponent, sign1: GiveWaySign, si
 	sign1 != sign2;
 	Sign.forRoadComponent(sign1, lane);
 	Sign.forRoadComponent(sign2, lane);
+}
+
+@Constraint(severity = "error",
+            message = "No connection between lanes",
+            key = {lane1, lane2})
+pattern unreachableLane(lane1: Lane, lane2: Lane) {
+	lane1 != lane2;
+	neg find reachableLane(lane1, lane2);
+}
+
+pattern reachableLane(lane1: Lane, lane2: Lane) {
+	lane1 != lane2;
+	find rightLaneOrToLane+(lane1, lane2);
+}
+
+pattern rightLaneOrToLane(lane1: Lane, lane2: Lane) {
+	lane1 != lane2;
+	find rightLane*(lane1, lane2);
+	find toLane*(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "Sidewalk is not next to a lane",
+            key = {sidewalk})
+pattern unreachableSidewalk(sidewalk: Sidewalk) {
+	neg find reachableSidewalk(sidewalk);
+}
+
+pattern reachableSidewalk(sidewalk: Sidewalk) {
+	RoadComponent.rightLane(_lane, sidewalk);
+} or {
+	RoadComponent.leftLane(_lane, sidewalk);
 }
 
 // If they turn in the opposite direction, I can't draw them (atm).

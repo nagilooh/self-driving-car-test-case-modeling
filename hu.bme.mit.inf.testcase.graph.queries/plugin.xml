@@ -10,6 +10,8 @@
       <query-specification fqn="queries.sidewalkNotOnRightSide"/>
       <query-specification fqn="queries.rightLane"/>
       <query-specification fqn="queries.leftLane"/>
+      <query-specification fqn="queries.toLane"/>
+      <query-specification fqn="queries.fromLane"/>
       <query-specification fqn="queries.crossConnection"/>
       <query-specification fqn="queries.laneInWrongSegmentOrDirection"/>
       <query-specification fqn="queries.lanesInSameSegmentAndDirection"/>
@@ -24,6 +26,11 @@
       <query-specification fqn="queries.multipleStopSignsOnLane"/>
       <query-specification fqn="queries.multipleGiveWaySignsOnLane"/>
       <query-specification fqn="queries.giveWaySignAndStopSignOnLane"/>
+      <query-specification fqn="queries.unreachableLane"/>
+      <query-specification fqn="queries.reachableLane"/>
+      <query-specification fqn="queries.rightLaneOrToLane"/>
+      <query-specification fqn="queries.unreachableSidewalk"/>
+      <query-specification fqn="queries.reachableSidewalk"/>
       <query-specification fqn="queries.turnFollowingTurn"/>
     </group>
   </extension>
