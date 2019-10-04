@@ -1,0 +1,36 @@
+import epackage "http://inf.mit.bme.hu/testcase"
+import viatra	"queries.TestCaseConstraints"
+
+generate {
+	metamodel = { package testcase excluding {
+		RoadSegment.name,
+		RoadComponent.name,
+		Scenario.name,
+		Sign.name,
+		Actor.name
+	}}
+	constraints = { package queries }
+	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/2_long_straight_2_lanes.xmi" }
+	solver = ViatraSolver 
+	
+	scope = {
+		#node += 0..2,
+		#<Sidewalk> += 0,
+		#<Frame> += 0,
+		#<Actor> += 0,
+		#<State> += 0,
+		#<Sign> += 0
+		//# string = {"A","B"}
+	}
+	
+	number = 10
+	runs = 1
+	config = {
+		log-level = normal
+		//log-level = normal
+	}
+	
+	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug"
+	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output"
+	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics"
+}

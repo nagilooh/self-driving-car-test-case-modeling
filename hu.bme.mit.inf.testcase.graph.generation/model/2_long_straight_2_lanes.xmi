@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase:Scenario
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:testcase="http://inf.mit.bme.hu/testcase"
+    xsi:schemaLocation="http://inf.mit.bme.hu/testcase ../../hu.bme.mit.inf.testcase.graph.model/model/testtrack.ecore">
+  <roadsegment
+      name="1">
+    <forward
+        xsi:type="testcase:Lane"
+        name="1.1"
+        straight="true"
+        toLane="//@roadsegment.1/@forward.0"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="1.2"
+        straight="true"
+        fromLane="//@roadsegment.1/@backward.0"/>
+  </roadsegment>
+  <roadsegment
+      name="2">
+    <forward
+        xsi:type="testcase:Lane"
+        name="2.1"
+        fromLane="//@roadsegment.0/@forward.0"/>
+    <backward
+        xsi:type="testcase:Lane"
+        name="2.2"
+        toLane="//@roadsegment.0/@backward.0"/>
+  </roadsegment>
+</testcase:Scenario>

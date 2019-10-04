@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><?eclipse version="3.0"?><!--
+--><plugin>
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <!-- @generated testtrack -->
+    <package class="autotesting.testcase.TestcasePackage" genModel="model/testtrack.genmodel" uri="http://inf.mit.bme.hu/testcase"/>
+  </extension>
+  <extension id="queries.TestCaseConstraints" point="org.eclipse.viatra.query.runtime.queryspecification">
+    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:queries.TestCaseConstraints" id="queries.TestCaseConstraints">
+      <query-specification fqn="queries.leadsToItself"/>
+      <query-specification fqn="queries.nextToItself"/>
+      <query-specification fqn="queries.nextToCycle"/>
+      <query-specification fqn="queries.nextToFollowingLane"/>
+      <query-specification fqn="queries.turningLaneHasLeftLane"/>
+      <query-specification fqn="queries.turningLaneHasRightLane"/>
+      <query-specification fqn="queries.sidewalkNotOnRightSide"/>
+      <query-specification fqn="queries.rightLane"/>
+      <query-specification fqn="queries.leftLane"/>
+      <query-specification fqn="queries.toLane"/>
+      <query-specification fqn="queries.fromLane"/>
+      <query-specification fqn="queries.crossConnection"/>
+      <query-specification fqn="queries.laneInWrongSegmentOrDirection"/>
+      <query-specification fqn="queries.lanesInSameSegmentAndDirection"/>
+      <query-specification fqn="queries.lanesInSameSegmentOppositeDirection"/>
+      <query-specification fqn="queries.reachableTroughRightLane"/>
+      <query-specification fqn="queries.segmentHasUnconnectedLanesInSameDirection"/>
+      <query-specification fqn="queries.lanesConnectToDifferentDirectionsInSameSegment"/>
+      <query-specification fqn="queries.actorHasMultipleStatesInFrame"/>
+      <query-specification fqn="queries.nextFrameCycle"/>
+      <query-specification fqn="queries.nextFrame"/>
+      <query-specification fqn="queries.multipleCrosswalksOnLane"/>
+      <query-specification fqn="queries.multipleStopSignsOnLane"/>
+      <query-specification fqn="queries.multipleGiveWaySignsOnLane"/>
+      <query-specification fqn="queries.giveWaySignAndStopSignOnLane"/>
+      <query-specification fqn="queries.unreachableSidewalk"/>
+      <query-specification fqn="queries.reachableSidewalk"/>
+      <query-specification fqn="queries.emptyRoadSegment"/>
+      <query-specification fqn="queries.roadComponentOfRoadSegment"/>
+      <query-specification fqn="queries.roadSegmentNoNeighbor"/>
+      <query-specification fqn="queries.neighborOfNeighborOfRoadSegment"/>
+      <query-specification fqn="queries.unconnectedLane"/>
+      <query-specification fqn="queries.turnNoFromLane"/>
+      <query-specification fqn="queries.turnNoToLane"/>
+      <query-specification fqn="queries.turnFollowingTurn"/>
+      <query-specification fqn="queries.twoLongToLaneCycle"/>
+      <query-specification fqn="queries.oppositeLanesLeadToSameLane"/>
+      <query-specification fqn="queries.oppositeLanesComeFromSameLane"/>
+      <query-specification fqn="queries.twoLongToLaneCycle2"/>
+    </group>
+  </extension>
+</plugin>
