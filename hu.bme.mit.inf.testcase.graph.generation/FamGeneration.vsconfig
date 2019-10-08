@@ -10,13 +10,14 @@ generate {
 		Actor.name
 	}}
 	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/3_way_intersection_partial.xmi" }
+	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
 	solver = ViatraSolver 
 	
 	scope = {
-		#node += 10,
+		//#node += 10,
 		//#<RoadSegment> += 0..5,
-		//#<Lane> += 10,
+		#<Lane> += 2..6,
+		#<RoadSegment> += 1..4,
 		#<Sidewalk> += 0,
 		#<Frame> += 0,
 		#<Actor> += 0,
@@ -28,8 +29,8 @@ generate {
 	number = 10
 	runs = 1
 	config = {
-		log-level = none
-		//log-level = normal
+		//log-level = none
+		log-level = normal
 	}
 	
 	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug"

@@ -382,6 +382,7 @@ pattern toLaneAndFromLaneInSameSegment(lane1: Lane) {
 // TODO constrict to grid???
 
 
+
 @Constraint(severity = "error",
             message = "rightNeighborOfNeighbor can't point to itself",
             key = {segment})
@@ -426,43 +427,44 @@ private pattern segmentWithTurn(scenario : Scenario) {
 }
 */
 
+
 @Constraint(severity = "error",
             message = "If two straight lanes are in the same segment and their toLanes/fromLanes are in the same segment, they must be next to each other",
             key = {lane1, lane2})
 pattern missingLeftLaneConnection(lane1 : Lane, lane2 : Lane) {
-	find roadComponentOfRoadSegment(segment1, lane1);
-	find roadComponentOfRoadSegment(segment1, lane2);
+	find lanesInSameSegmentAndDirection(segment1, lane1, lane2);
+	//find roadComponentOfRoadSegment(segment1, lane1);
+	//find roadComponentOfRoadSegment(segment1, lane2);
 	Lane.straight(lane1, true);
 	Lane.straight(lane2, true);
 	Lane.toLane(lane1, lane3);
 	Lane.toLane(lane2, lane4);
-	find roadComponentOfRoadSegment(segment2, lane3);
-	find roadComponentOfRoadSegment(segment2, lane4);
+	find lanesInSameSegmentAndDirection(segment1, lane3, lane4);
+	//find roadComponentOfRoadSegment(segment2, lane3);
+	//find roadComponentOfRoadSegment(segment2, lane4);
 	neg find leftLaneOrRightLaneTransitive(lane1, lane2);
 } or {
-	find roadComponentOfRoadSegment(segment1, lane1);
-	find roadComponentOfRoadSegment(segment1, lane2);
+	find lanesInSameSegmentAndDirection(segment1, lane1, lane2);
+	//find roadComponentOfRoadSegment(segment1, lane1);
+	//find roadComponentOfRoadSegment(segment1, lane2);
 	Lane.straight(lane1, true);
 	Lane.straight(lane2, true);
 	Lane.fromLane(lane1, lane3);
 	Lane.fromLane(lane2, lane4);
-	find roadComponentOfRoadSegment(segment2, lane3);
-	find roadComponentOfRoadSegment(segment2, lane4);
+	find lanesInSameSegmentAndDirection(segment1, lane3, lane4);
+	//find roadComponentOfRoadSegment(segment2, lane3);
+	//find roadComponentOfRoadSegment(segment2, lane4);
 	neg find leftLaneOrRightLaneTransitive(lane1, lane2); 
 }
 
-private pattern rightLaneOrLeftLane(lane1 : Lane, lane2 : Lane) {
-	Lane.rightLane(lane1, lane2);
-} or {
-	Lane.leftLane(lane1, lane2);
-}
-
 private pattern leftLaneOrRightLaneTransitive(lane1 : Lane, lane2 : Lane) {
-	find rightLaneOrLeftLane+(lane1, lane2);
+	find leftLane+(lane1, lane2);
+} or {
+	find rightLane+(lane1, lane2);
 }
 
-/*
-// TODO exclude straight lanes splitting/merging
+
+// exclude straight lanes splitting/merging
 @Constraint(severity = "error",
             message = "Lane splits into two straight lanes",
             key = {lane})
@@ -472,21 +474,24 @@ pattern splittingLane(lane : Lane) {
 	lane2 != lane3;
 	Lane.straight(lane2, true);
 	Lane.straight(lane3, true);
+	//neg find notStraightLane(lane2);
+	//neg find notStraightLane(lane3);
 }
 
 @Constraint(severity = "error",
-            message = "Lane splits into two straight lanes",
+            message = "Two straight lanes merge into one lane",
             key = {lane})
 pattern mergingLane(lane : Lane) {
 	Lane.fromLane(lane, lane2);
 	Lane.fromLane(lane, lane3);
 	lane2 != lane3;
-	Lane.straight(lane2, true);
-	Lane.straight(lane3, true);
+	neg find notStraightLane(lane2);
+	neg find notStraightLane(lane3);
 }
-*/
 
-
+private pattern notStraightLane(lane : Lane) {
+	Lane.straight(lane, false);
+}
 
 
 
