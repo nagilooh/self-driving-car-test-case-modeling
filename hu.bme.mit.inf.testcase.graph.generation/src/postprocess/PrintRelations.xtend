@@ -111,63 +111,81 @@ class PrintRelations {
 		Resource.Factory.Registry.INSTANCE.extensionToFactoryMap.put("xmi",new XMIResourceFactoryImpl())
 		val printer = new PrintRelations
 		//val model = printer.loadModel("model/2_long_straight_2_lanes.xmi")
-		val model = printer.loadModel("model/3_way_intersection_double_lane2.xmi")
-		var segmentNumbering = 1
-		var laneNumbering = 1
+		//val model = printer.loadModel("model/3_way_intersection_double_lane2.xmi")
 		
-		
-		for (roadsegment : model.roadsegment) {
-			roadsegment.name = "segment" + segmentNumbering++
-			allSegments.add(roadsegment.name)
+		for (var i = 1; i <= 10; i++) {
+			
+			allSegments = new ArrayList<String>
+			straight = new ArrayList<String>
+			notStraight = new ArrayList<String>
+			allLanes = new ArrayList<String>
+			inRoadSegmentList = new ArrayList<Pair>
+			nextToFromLeftList = new ArrayList<Pair>
+			nextToFromLeftOppositeList = new ArrayList<Pair>
+			joinsList = new ArrayList<Pair>
+			
+			val model = printer.loadModel("output/output/" + i + ".xmi")
+			var segmentNumbering = 1
+			var laneNumbering = 1
 			
 			
-			for (roadcomponent : roadsegment.forward) {
-				collectLeftLane(roadcomponent)
-				collecttToLane(roadcomponent)
-				roadcomponent.name = "lane" + laneNumbering++
-				allLanes.add(roadcomponent.name)
-				if ((roadcomponent as Lane).isStraight) {
-					straight.add(roadcomponent.name)
+			for (roadsegment : model.roadsegment) {
+				roadsegment.name = "segment" + segmentNumbering++
+				allSegments.add(roadsegment.name)
+				
+				
+				for (roadcomponent : roadsegment.forward) {
+					collectLeftLane(roadcomponent)
+					collecttToLane(roadcomponent)
+					roadcomponent.name = "lane" + laneNumbering++
+					allLanes.add(roadcomponent.name)
+					if ((roadcomponent as Lane).isStraight) {
+						straight.add(roadcomponent.name)
+					}
+					else {
+						notStraight.add(roadcomponent.name)
+					}
+					inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
 				}
-				else {
-					notStraight.add(roadcomponent.name)
+				for (roadcomponent : roadsegment.backward) {
+					collectLeftLane(roadcomponent)
+					collecttToLane(roadcomponent)
+					roadcomponent.name = "lane" + laneNumbering++
+					allLanes.add(roadcomponent.name)
+					if ((roadcomponent as Lane).isStraight) {
+						straight.add(roadcomponent.name)
+					}
+					else {
+						notStraight.add(roadcomponent.name)
+					}
+					inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
 				}
-				inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
+				var opposite = get_opposite_lanes(roadsegment)
+				if (opposite !== null) {
+					nextToFromLeftOppositeList.add(opposite)
+				}
 			}
-			for (roadcomponent : roadsegment.backward) {
-				collectLeftLane(roadcomponent)
-				collecttToLane(roadcomponent)
-				roadcomponent.name = "lane" + laneNumbering++
-				allLanes.add(roadcomponent.name)
-				if ((roadcomponent as Lane).isStraight) {
-					straight.add(roadcomponent.name)
-				}
-				else {
-					notStraight.add(roadcomponent.name)
-				}
-				inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
-			}
-			var opposite = get_opposite_lanes(roadsegment)
-			if (opposite !== null) {
-				nextToFromLeftOppositeList.add(opposite)
-			}
+		
+			println(i + ".xmi")
+			print("lanes: ")
+			println(allLanes)
+			print("straight lanes: ")
+			println(straight)
+			print("not straight lanes: ")
+			println(notStraight)
+			print("left: ")
+			println(nextToFromLeftList)
+			print("left opposite: ")
+			println(nextToFromLeftOppositeList)
+			print("joins: ")
+			println(joinsList)
+			print("roadsegments: ")
+			println(allSegments)
+			print("in roadsegment: ")
+			println(inRoadSegmentList)
+			println()
+			println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+			println()
 		}
-		
-		print("lanes: ")
-		println(allLanes)
-		print("straight lanes: ")
-		println(straight)
-		print("not stright lanes: ")
-		println(notStraight)
-		print("left: ")
-		println(nextToFromLeftList)
-		print("left opposite: ")
-		println(nextToFromLeftOppositeList)
-		print("joins: ")
-		println(joinsList)
-		print("roadsegments: ")
-		println(allSegments)
-		print("in roadsegment: ")
-		println(inRoadSegmentList)
 	}
 }
