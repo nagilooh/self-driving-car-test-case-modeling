@@ -30,6 +30,7 @@
       <query-specification fqn="queries.giveWaySignAndStopSignOnLane"/>
       <query-specification fqn="queries.unreachableSidewalk"/>
       <query-specification fqn="queries.emptyRoadSegment"/>
+      <query-specification fqn="queries.roadComponentOfRoadSegment"/>
       <query-specification fqn="queries.roadSegmentNoNeighbor"/>
       <query-specification fqn="queries.unconnectedLane"/>
       <query-specification fqn="queries.turnNoFromLane"/>
@@ -38,14 +39,20 @@
       <query-specification fqn="queries.twoLongToLaneCycle"/>
       <query-specification fqn="queries.oppositeLanesLeadToSameLane"/>
       <query-specification fqn="queries.oppositeLanesComeFromSameLane"/>
-      <query-specification fqn="queries.twoLongToLaneCycle2"/>
+      <query-specification fqn="queries.toLaneSameSegmentOppositeDirection"/>
+      <query-specification fqn="queries.toLaneSameSegmentSameDirection"/>
       <query-specification fqn="queries.turningLaneBackward"/>
       <query-specification fqn="queries.toLaneAndFromLaneInSameSegment"/>
       <query-specification fqn="queries.rightNeighborOfNeighborPointsToItself"/>
       <query-specification fqn="queries.rightNeighborOfNeighborNoTurningLane"/>
-      <query-specification fqn="queries.missingLeftLaneConnection"/>
+      <query-specification fqn="queries.missingLeftLaneConnectionToLane"/>
+      <query-specification fqn="queries.missingLeftLaneConnectionFromLane"/>
       <query-specification fqn="queries.splittingLane"/>
       <query-specification fqn="queries.mergingLane"/>
+      <query-specification fqn="queries.toLanesInDifferentSegments"/>
+      <query-specification fqn="queries.fromLanesInDifferentSegments"/>
+      <query-specification fqn="queries.unconnectedSegments"/>
+      <query-specification fqn="queries.tooWideRoad"/>
     </group>
   </extension>
 </plugin>
