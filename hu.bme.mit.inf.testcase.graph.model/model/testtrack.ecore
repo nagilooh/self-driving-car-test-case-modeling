@@ -6,8 +6,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="actor" upperBound="-1"
         eType="#//Actor" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="SUT" eType="#//Actor"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="roadsegment" upperBound="-1"
-        eType="#//RoadSegment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roadsegment" lowerBound="1"
+        upperBound="-1" eType="#//RoadSegment" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="frame" upperBound="-1"
         eType="#//Frame" containment="true"/>
   </eClassifiers>
@@ -27,7 +27,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Sign" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="forRoadComponent" lowerBound="1"
-        eType="#//RoadComponent"/>
+        upperBound="-1" eType="#//RoadComponent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RoadComponent" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -44,9 +44,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sidewalk" eSuperTypes="#//RoadComponent"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Lane" eSuperTypes="#//RoadComponent">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="straight" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Lane" abstract="true" eSuperTypes="#//RoadComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromLane" upperBound="-1"
         eType="#//Lane" eOpposite="#//Lane/toLane"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toLane" upperBound="-1"
@@ -70,4 +68,6 @@
         eType="#//State" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nextFrame" eType="#//Frame"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StraightLane" eSuperTypes="#//Lane"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TurningLane" eSuperTypes="#//Lane"/>
 </ecore:EPackage>

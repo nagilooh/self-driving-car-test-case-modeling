@@ -53,6 +53,10 @@
       <query-specification fqn="queries.fromLanesInDifferentSegments"/>
       <query-specification fqn="queries.unconnectedSegments"/>
       <query-specification fqn="queries.tooWideRoad"/>
+      <query-specification fqn="queries.turningLaneToLaneNotStaight"/>
+      <query-specification fqn="queries.turningLaneFromLaneNotStaight"/>
+      <query-specification fqn="queries.turningLaneInSegmentOfToLaneOfTurningLane"/>
+      <query-specification fqn="queries.turningLaneInSegmentOfFromLaneOfTurningLane"/>
     </group>
   </extension>
 </plugin>
