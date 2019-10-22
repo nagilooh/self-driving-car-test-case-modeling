@@ -5,38 +5,8 @@ scope size10 {
 		//#<RoadSegment> += 0..5,
 		#node += 0..10,
 		//#<StraightLane> += 0..12,
-		//#<TurningLane> += 2..4,
-		//#<RoadSegment> += 0..4,
-		#<Sidewalk> += 0
-		//# string = {"A","B"}
-}
-
-scope size15 {
-		//#<RoadSegment> += 0..5,
-		#node += 11..15,
-		//#<StraightLane> += 0..12,
-		//#<TurningLane> += 2..4,
-		//#<RoadSegment> += 0..4,
-		#<Sidewalk> += 0
-		//# string = {"A","B"}
-}
-
-scope size14 {
-		//#<RoadSegment> += 0..5,
-		//#node += 2,
-		#<StraightLane> += 0..8,
 		#<TurningLane> += 2,
-		#<RoadSegment> += 1..4,
-		#<Sidewalk> += 0
-		//# string = {"A","B"}
-}
-
-scope size25 {
-		//#<RoadSegment> += 0..5,
-		//#node += 2,
-		#<StraightLane> += 9..15,
-		#<TurningLane> += 3..5,
-		#<RoadSegment> += 2..5,
+		//#<RoadSegment> += 0..4,
 		#<Sidewalk> += 0
 		//# string = {"A","B"}
 }
@@ -53,222 +23,19 @@ generate {
 		RoadSegment.sign
 	}}
 	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
+	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/3-way-partial.xmi" }
 	solver = ViatraSolver 
 	
 	scope = size10
 	
-	number = 100
+	number = 10
 	runs = 1
 	config = {
-		//log-level = none
 		log-level = normal
+		//log-level = normal
 	}
 	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-10"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-10"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-10"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size15
-	
-	number = 100
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-15"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-15"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-15"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size14
-	
-	number = 100
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-14"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-14"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-14"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size25
-	
-	number = 100
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-25"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-25"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-25"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size10
-	
-	number = 1000
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-10"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-10"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-10"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size15
-	
-	number = 1000
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-15"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-15"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-15"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size14
-	
-	number = 1000
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-14"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-14"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-14"
-}
-
-generate {
-	metamodel = { package testcase excluding {
-		RoadSegment.name,
-		RoadComponent.name,
-		Scenario.name,
-		Sign.name,
-		Actor.name,
-		Scenario.frame,
-		Scenario.actor,
-		RoadSegment.sign
-	}}
-	constraints = { package queries }
-	partial-model = { "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/model/1_long_straight_2_lanes.xmi" }
-	solver = ViatraSolver 
-	
-	scope = size25
-	
-	number = 1000
-	runs = 1
-	config = {
-		//log-level = none
-		log-level = normal
-	}
-	
-	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/debug-25"
-	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-25"
-	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-25"
+	debug = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/size-10"
+	output = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/output-size-10"
+	statistics = "platform:/resource/hu.bme.mit.inf.testcase.graph.generation/output/statistics-size-10"
 }

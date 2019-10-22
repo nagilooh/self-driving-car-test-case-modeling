@@ -57,6 +57,12 @@
       <query-specification fqn="queries.turningLaneFromLaneNotStaight"/>
       <query-specification fqn="queries.turningLaneInSegmentOfToLaneOfTurningLane"/>
       <query-specification fqn="queries.turningLaneInSegmentOfFromLaneOfTurningLane"/>
+      <query-specification fqn="queries.rightNeighborOfNeighborNotOneCycle"/>
+      <query-specification fqn="queries.rightNeighborNoLeftNeighbor"/>
+      <query-specification fqn="queries.leftNeighborNoRightNeighbor"/>
+      <query-specification fqn="queries.disconnectedRightNeighborOfNeighbor"/>
+      <query-specification fqn="queries.noSegmentBetweenTurns"/>
+      <query-specification fqn="queries.singleSegmentBetweenTurns"/>
     </group>
   </extension>
 </plugin>
