@@ -10,6 +10,16 @@ import java.util.ArrayList
 import testcase.Scenario
 import testcase.RoadSegment
 import testcase.RoadComponent
+import org.eclipse.viatra.query.runtime.emf.EMFScope
+import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine
+import queries.TestCaseConstraints
+import queries.RoadComponentOfRoadSegment
+import testcase.TestcaseFactory
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl
+import java.util.Collection
+import org.eclipse.viatra.query.runtime.api.IPatternMatch
+import testcase.StraightLane
+import testcase.TurningLane
 
 class Pair {
 	Lane a = null
@@ -44,16 +54,52 @@ class Pair {
 	}
 }
 
+class SegmentOrder {
+	RoadSegment center = null
+	ArrayList<RoadSegment> segments = new ArrayList<RoadSegment>
+	
+	new(RoadSegment center) {
+		this.center = center
+	}
+	
+	def getCenter() {
+		center
+	}
+	
+	def getSegments() {
+		segments
+	}
+	
+	def String printSegments() {
+		var s = ""
+		for (segment : segments) {
+			s += segment.name + ", "
+		}
+		s = s.substring(0, s.length() - 2)
+		return s
+	}
+	
+	def addSegment(RoadSegment segment) {
+		segments.add(segment)
+	}
+	
+	override toString() {
+		"(" + center.name + "; " + printSegments + ")"
+	}
+}
+
+
 class PrintRelations {
 	
-	static ArrayList<String> allSegments = new ArrayList<String>
-	static ArrayList<String> straight = new ArrayList<String>
-	static ArrayList<String> notStraight = new ArrayList<String>
-	static ArrayList<String> allLanes = new ArrayList<String>
-	static ArrayList<Pair> inRoadSegmentList = new ArrayList<Pair>
-	static ArrayList<Pair> nextToFromLeftList = new ArrayList<Pair>
-	static ArrayList<Pair> nextToFromLeftOppositeList = new ArrayList<Pair>
-	static ArrayList<Pair> joinsList = new ArrayList<Pair>
+	static ArrayList<String> allSegments //= new ArrayList<String>
+	static ArrayList<String> straight //= new ArrayList<String>
+	static ArrayList<String> notStraight //= new ArrayList<String>
+	static ArrayList<String> allLanes //= new ArrayList<String>
+	static ArrayList<Pair> inRoadSegmentList //= new ArrayList<Pair>
+	static ArrayList<Pair> nextToFromLeftList //= new ArrayList<Pair>
+	static ArrayList<Pair> nextToFromLeftOppositeList //= new ArrayList<Pair>
+	static ArrayList<Pair> joinsList //= new ArrayList<Pair>
+	static ArrayList<SegmentOrder> connectionOrderList //= new ArrayList<SegmentOrder>
 	
 	def loadModel(String path) {
 		val resSet = new ResourceSetImpl()
@@ -103,7 +149,21 @@ class PrintRelations {
 				joinsList.add(new Pair(roadcomponent as Lane, toLane as Lane))
 			}
 		}
+	}
+	
+	def EMFScope initializeModelScope() {
+		return new EMFScope(TestcasePackage.eINSTANCE.eResource.resourceSet)
 	}	
+	
+	def static ViatraQueryEngine prepareQueryEngine(EMFScope scope) {
+		// Access managed query engine
+	    val engine = ViatraQueryEngine.on(scope)
+	
+	    // Initialize all queries on engine
+		//TestCaseConstraints.instance().prepare(engine)
+	
+		return engine
+	}
 	
 	def static void main(String[] args) {
 		// Init
@@ -123,27 +183,58 @@ class PrintRelations {
 			nextToFromLeftList = new ArrayList<Pair>
 			nextToFromLeftOppositeList = new ArrayList<Pair>
 			joinsList = new ArrayList<Pair>
+			connectionOrderList = new ArrayList<SegmentOrder>
 			
-			val model = printer.loadModel("output/output/" + i + ".xmi")
+			val model = printer.loadModel("output/output-turns-100/" + i + ".xmi")
 			var segmentNumbering = 1
 			var laneNumbering = 1
+			val engine = ViatraQueryEngine.on(new EMFScope(model.eResource))
+			val matcher = RoadComponentOfRoadSegment.Matcher.on(engine)
+			//Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 			
 			
 			for (roadsegment : model.roadsegment) {
 				roadsegment.name = "segment" + segmentNumbering++
 				allSegments.add(roadsegment.name)
-				
+				var savedConnectionOrder = false
 				
 				for (roadcomponent : roadsegment.forward) {
+					
+					
+					
+					
+					
 					collectLeftLane(roadcomponent)
 					collecttToLane(roadcomponent)
 					roadcomponent.name = "lane" + laneNumbering++
 					allLanes.add(roadcomponent.name)
-					if ((roadcomponent as Lane).isStraight) {
+					if (roadcomponent instanceof StraightLane) {
 						straight.add(roadcomponent.name)
 					}
-					else {
+					else if (roadcomponent instanceof TurningLane) {
 						notStraight.add(roadcomponent.name)
+						if (!savedConnectionOrder) {
+							try {
+								val order = new SegmentOrder(roadsegment)
+								val fromlane = roadcomponent.fromLane.get(0)
+								var matches = matcher.getAllValuesOfroadSegment(fromlane)
+								val order_original = matches.get(0)
+								order.addSegment(order_original)
+								var next_segment = order_original.rightNeighborOfNeighbor
+								while (next_segment != order_original) {
+									order.addSegment(next_segment)
+									next_segment = next_segment.rightNeighborOfNeighbor
+								}
+								connectionOrderList.add(order)
+							
+							
+							}
+							catch (Exception e) {
+								println("Error")
+							}
+							
+							savedConnectionOrder = true
+						}
 					}
 					inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
 				}
@@ -152,11 +243,25 @@ class PrintRelations {
 					collecttToLane(roadcomponent)
 					roadcomponent.name = "lane" + laneNumbering++
 					allLanes.add(roadcomponent.name)
-					if ((roadcomponent as Lane).isStraight) {
+					if (roadcomponent instanceof StraightLane) {
 						straight.add(roadcomponent.name)
 					}
-					else {
+					else if (roadcomponent instanceof TurningLane) {
 						notStraight.add(roadcomponent.name)
+						if (!savedConnectionOrder) {
+							val order = new SegmentOrder(roadsegment)
+							val fromlane = roadcomponent.fromLane.get(0)
+							var matches = matcher.getAllValuesOfroadSegment(fromlane)
+							val order_original = matches.get(0)
+							order.addSegment(order_original)
+							var next_segment = order_original.rightNeighborOfNeighbor
+							while (next_segment != order_original) {
+								order.addSegment(next_segment)
+								next_segment = next_segment.rightNeighborOfNeighbor
+							}
+							connectionOrderList.add(order)
+							savedConnectionOrder = true
+						}
 					}
 					inRoadSegmentList.add(new Pair(roadcomponent as Lane, roadsegment))
 				}
@@ -183,6 +288,8 @@ class PrintRelations {
 			println(allSegments)
 			print("in roadsegment: ")
 			println(inRoadSegmentList)
+			print("connection order (clockwise): ")
+			println(connectionOrderList)
 			println()
 			println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 			println()
