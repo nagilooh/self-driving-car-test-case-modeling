@@ -2,6 +2,139 @@ package queries
 
 import "http://inf.mit.bme.hu/testcase"
 
+// General patterns
+
+private pattern rightLane(l1: RoadComponent, l2: RoadComponent){
+	RoadComponent.rightLane(l1, l2);
+}
+
+private pattern leftLane(l1: RoadComponent, l2: RoadComponent){
+	RoadComponent.leftLane(l1, l2);
+}
+
+private pattern toLane(l1: Lane, l2: Lane){
+	Lane.toLane(l1, l2);
+}
+
+private pattern fromLane(l1: Lane, l2: Lane){
+	Lane.fromLane(l1, l2);
+}
+
+pattern roadComponentOfRoadSegment(roadSegment : RoadSegment, roadComponent : RoadComponent) {
+	RoadSegment.forward(roadSegment, roadComponent);
+} or {
+	RoadSegment.backward(roadSegment, roadComponent);
+}
+
+private pattern lanesInSameSegmentAndDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
+	RoadSegment.forward(seg, l1);
+	RoadSegment.forward(seg, l2);
+} or {
+	RoadSegment.backward(seg, l1);
+	RoadSegment.backward(seg, l2);
+	
+}
+
+private pattern lanesInSameSegmentOppositeDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
+	RoadSegment.forward(seg, l1);
+	RoadSegment.backward(seg, l2);
+} or {
+	RoadSegment.backward(seg, l1);
+	RoadSegment.forward(seg, l2);
+	
+}
+
+private pattern segmentHasUnconnectedLanesInSameDirection(segm: RoadSegment) {
+	lane1 != lane2;
+	find lanesInSameSegmentAndDirection(segm, lane1, lane2);
+	neg find reachableTroughRightLane(lane1, lane2);
+	neg find reachableTroughRightLane(lane2, lane1);
+}
+
+private pattern reachableTroughRightLane(l1: RoadComponent, l2: RoadComponent) {
+	find rightLane+(l1, l2);
+}
+
+private pattern reachableSidewalk(sidewalk: Sidewalk) {
+	RoadComponent.rightLane(_lane, sidewalk);
+} or {
+	RoadComponent.leftLane(_lane, sidewalk);
+}
+
+private pattern neighborOfNeighborOfRoadSegment(roadSegment : RoadSegment, neighbor : RoadSegment) {
+	RoadSegment.rightNeighborOfNeighbor(roadSegment, neighbor);
+} or {
+	RoadSegment.leftNeighborOfNeighbor(roadSegment, neighbor);
+}
+
+private pattern segmentNextToTurn(segment : RoadSegment) {
+	find directlyConnectedSegments(segment, intersection);
+	RoadSegment.forward(intersection, turn);
+	TurningLane(turn);
+}
+
+private pattern leftLaneOrRightLaneTransitive(lane1 : Lane, lane2 : Lane) {
+	find leftLane+(lane1, lane2);
+} or {
+	find rightLane+(lane1, lane2);
+}
+
+private pattern connectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
+	find directlyConnectedSegments+(segment1, segment2);
+}
+
+private pattern directlyConnectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
+	segment1 != segment2;
+	find roadComponentOfRoadSegment(segment1, component1);
+	find roadComponentOfRoadSegment(segment2, component2);
+	Lane.toLane(component1, component2);
+} or {
+	segment1 != segment2;
+	find roadComponentOfRoadSegment(segment1, component1);
+	find roadComponentOfRoadSegment(segment2, component2);
+	Lane.fromLane(component1, component2);
+}
+
+private pattern straightToLane(lane1 : Lane, lane2 : StraightLane) {
+	Lane.toLane(lane1, lane2);
+}
+
+private pattern straightFromLane(lane1 : Lane, lane2 : StraightLane) {
+	Lane.fromLane(lane1, lane2);
+}
+
+private pattern rightNeighborOfNeighborTransitive(segment1 : RoadSegment, segment2 : RoadSegment) {
+	find rightNeighborOfNeighbor+(segment1, segment2);
+}
+
+
+private pattern rightNeighborOfNeighbor(segment1 : RoadSegment, segment2 : RoadSegment) {
+	RoadSegment.rightNeighborOfNeighbor(segment1, segment2);
+}
+
+private pattern leftNeighborOfNeighbor(segment1 : RoadSegment, segment2 : RoadSegment) {
+	RoadSegment.leftNeighborOfNeighbor(segment1, segment2);
+}
+
+private pattern commonConnectedIntersection(segment1 : RoadSegment, segment2 : RoadSegment, common : RoadSegment) {
+	segment1 != segment2;
+	segment1 != common;
+	segment2 != common;
+	find roadComponentOfRoadSegment(common, turn);
+	TurningLane(turn);
+	find directlyConnectedSegments(segment1, common);
+	find directlyConnectedSegments(segment2, common);
+}
+
+
+
+
+
+
+
+
+// Constraints for all lanes
+
 @Constraint(severity = "error",
             message = "The 'toLane' reference of the lane points to itself",
             key = {lane})
@@ -32,45 +165,6 @@ pattern nextToFollowingLane(lane1: Lane, lane2: Lane) {
 }
 
 @Constraint(severity = "error",
-            message = "Turning lane can't have leftLane",
-            key = {lane1, lane2})
-pattern turningLaneHasLeftLane(lane1: TurningLane, lane2 : Lane) {
-	//Lane.straight(lane1, false);
-	RoadComponent.leftLane(lane1, lane2);
-}
-
-@Constraint(severity = "error",
-            message = "Turning lane can't have rightLane",
-            key = {lane1, lane2})
-pattern turningLaneHasRightLane(lane1: TurningLane, lane2 : Lane) {
-	//Lane.straight(lane1, false);
-	RoadComponent.rightLane(lane1, lane2);
-}
-
-@Constraint(severity = "error",
-            message = "Sidewalk is not on the side",
-            key = {sidewalk})
-pattern sidewalkNotOnRightSide(sidewalk: Sidewalk) {
-	RoadComponent.rightLane(sidewalk, _other);
-}
-
-private pattern rightLane(l1: RoadComponent, l2: RoadComponent){
-	RoadComponent.rightLane(l1, l2);
-}
-
-private pattern leftLane(l1: RoadComponent, l2: RoadComponent){
-	RoadComponent.leftLane(l1, l2);
-}
-
-private pattern toLane(l1: Lane, l2: Lane){
-	Lane.toLane(l1, l2);
-}
-
-private pattern fromLane(l1: Lane, l2: Lane){
-	Lane.fromLane(l1, l2);
-}
-
-@Constraint(severity = "error",
             message = "A parallel pair of lanes cross while connecting to an other parallel pair of lanes",
             key = {lane1, lane2})
 pattern crossConnection(lane1: Lane, lane2: Lane, lane3: Lane, lane4: Lane) {
@@ -88,35 +182,6 @@ pattern laneInWrongSegmentOrDirection(lane1: RoadComponent, lane2: RoadComponent
 	neg find lanesInSameSegmentAndDirection(_segm, lane1, lane2);
 }
 
-private pattern lanesInSameSegmentAndDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
-	RoadSegment.forward(seg, l1);
-	RoadSegment.forward(seg, l2);
-} or {
-	RoadSegment.backward(seg, l1);
-	RoadSegment.backward(seg, l2);
-	
-}
-
-private pattern lanesInSameSegmentOppositeDirection(seg: RoadSegment, l1: RoadComponent, l2: RoadComponent) {
-	RoadSegment.forward(seg, l1);
-	RoadSegment.backward(seg, l2);
-} or {
-	RoadSegment.backward(seg, l1);
-	RoadSegment.forward(seg, l2);
-	
-}
-
-private pattern reachableTroughRightLane(l1: RoadComponent, l2: RoadComponent) {
-	find rightLane+(l1, l2);
-}
-
-private pattern segmentHasUnconnectedLanesInSameDirection(segm: RoadSegment) {
-	lane1 != lane2;
-	find lanesInSameSegmentAndDirection(segm, lane1, lane2);
-	neg find reachableTroughRightLane(lane1, lane2);
-	neg find reachableTroughRightLane(lane2, lane1);
-}
-
 @Constraint(severity = "error",
             message = "Lanes connect to different directions in the same segment",
             key = {lane1, lane2, lane3, lane4})
@@ -128,129 +193,6 @@ pattern lanesConnectToDifferentDirectionsInSameSegment(lane1: Lane, lane2: Lane,
 	find lanesInSameSegmentOppositeDirection(_seg2, lane3, lane4);
 }
 
-@Constraint(severity = "error",
-            message = "fromLane of turning lane must be in a different segment",
-            key = {lane1, lane2})
-pattern fromLaneOfTurnInSameSegment(lane1: TurningLane, lane2: Lane) {
-	//Lane.straight(lane1, false);
-	Lane.fromLane(lane1, lane2);
-	find roadComponentOfRoadSegment(segment, lane1);
-	find roadComponentOfRoadSegment(segment, lane2);
-}
-
-@Constraint(severity = "error",
-            message = "toLane of turning lane must be in a different segment",
-            key = {lane1, lane2})
-pattern toLaneofTurnInSameSegment(lane1: TurningLane, lane2: Lane) {
-	//Lane.straight(lane1, false);
-	Lane.toLane(lane1, lane2);
-	find roadComponentOfRoadSegment(segment, lane1);
-	find roadComponentOfRoadSegment(segment, lane2);
-}
-
-@Constraint(severity = "error",
-            message = "Actor has multiple states in the same frame",
-            key = {frame, actor})
-pattern actorHasMultipleStatesInFrame(frame: Frame, actor: Actor) {
-	Frame.state(frame, state1);
-	Frame.state(frame, state2);
-	state1 != state2;
-	State.actor(state1, actor);
-	State.actor(state2, actor);
-}
-
-@Constraint(severity = "error",
-            message = "There is a cycle of 'nextFrame' references",
-            key = {frame})
-pattern nextFrameCycle(frame: Frame) {
-	find nextFrame+(frame, frame);
-}
-
-private pattern nextFrame(frame1: Frame, frame2: Frame) {
-	Frame.nextFrame(frame1, frame2);
-}
-
-
-@Constraint(severity = "error",
-            message = "Lane has more than one crosswalk",
-            key = {lane, sign1, sign2})
-pattern multipleCrosswalksOnLane(lane: RoadComponent, sign1: Crosswalk, sign2: Crosswalk) {
-	sign1 != sign2;
-	Sign.forRoadComponent(sign1, lane);
-	Sign.forRoadComponent(sign2, lane);
-}
-
-
-@Constraint(severity = "error",
-            message = "Lane has more than one stop sign",
-            key = {lane, sign1, sign2})
-pattern multipleStopSignsOnLane(lane: RoadComponent, sign1: StopSign, sign2: StopSign) {
-	sign1 != sign2;
-	Sign.forRoadComponent(sign1, lane);
-	Sign.forRoadComponent(sign2, lane);
-}
-
-
-@Constraint(severity = "error",
-            message = "Lane has more than one give way sign",
-            key = {lane, sign1, sign2})
-pattern multipleGiveWaySignsOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: GiveWaySign) {
-	sign1 != sign2;
-	Sign.forRoadComponent(sign1, lane);
-	Sign.forRoadComponent(sign2, lane);
-}
-
-
-@Constraint(severity = "error",
-            message = "Lane has give way sign and stop sign",
-            key = {lane, sign1, sign2})
-pattern giveWaySignAndStopSignOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: StopSign) {
-	sign1 != sign2;
-	Sign.forRoadComponent(sign1, lane);
-	Sign.forRoadComponent(sign2, lane);
-}
-
-@Constraint(severity = "error",
-            message = "Sidewalk is not next to a lane",
-            key = {sidewalk})
-pattern unreachableSidewalk(sidewalk: Sidewalk) {
-	neg find reachableSidewalk(sidewalk);
-}
-
-private pattern reachableSidewalk(sidewalk: Sidewalk) {
-	RoadComponent.rightLane(_lane, sidewalk);
-} or {
-	RoadComponent.leftLane(_lane, sidewalk);
-}
-
-@Constraint(severity = "error",
-            message = "RoadSegment must have at least one RoadComponent",
-            key = {roadSegment})
-pattern emptyRoadSegment(roadSegment : RoadSegment) {
-	neg find roadComponentOfRoadSegment(roadSegment, _);
-}
-
-pattern roadComponentOfRoadSegment(roadSegment : RoadSegment, roadComponent : RoadComponent) {
-	RoadSegment.forward(roadSegment, roadComponent);
-} or {
-	RoadSegment.backward(roadSegment, roadComponent);
-}
-
-
-@Constraint(severity = "error",
-            message = "RoadSegment connected to segment with turning lane must have rightNeighborOfNeighbor and leftNeigborOfNeighbor",
-            key = {roadSegment})
-pattern roadSegmentNoNeighbor(roadSegment : RoadSegment) {
-	find segmentNextToTurn(roadSegment);
-	neg find neighborOfNeighborOfRoadSegment(roadSegment, _);
-}
-
-private pattern neighborOfNeighborOfRoadSegment(roadSegment : RoadSegment, neighbor : RoadSegment) {
-	RoadSegment.rightNeighborOfNeighbor(roadSegment, neighbor);
-} or {
-	RoadSegment.leftNeighborOfNeighbor(roadSegment, neighbor);
-}
-
 @Constraint(severity = "error", 
 			message = "All lanes must be connected",
 			key = {lane1})
@@ -259,37 +201,6 @@ pattern unconnectedLane(lane1 : Lane) {
 	neg find fromLane(lane1, _);
 	neg find leftLane(lane1, _);
 	neg find rightLane(lane1, _);
-}
-
-@Constraint(severity = "error",
-            message = "Turn has no fromLane",
-            key = {turn})
-pattern turnNoFromLane(turn: TurningLane) {
-	//Lane.straight(turn, false);
-	neg find fromLane(turn, _fromlane);
-}
-
-@Constraint(severity = "error",
-            message = "Turn has no toLane",
-            key = {turn})
-pattern turnNoToLane(turn: TurningLane) {
-	//Lane.straight(turn, false);
-	neg find toLane(turn, _tolane);
-}
-
-@Constraint(severity = "error",
-            message = "Turn is following an other turn",
-            key = {turn2})
-pattern turnFollowingTurn(turn1: TurningLane, turn2: TurningLane) {
-	Lane.toLane(turn1, turn2);
-}
-
-@Constraint(severity = "error",
-            message = "toLane cycle of length two",
-            key = {lane1, lane2})
-pattern twoLongToLaneCycle(lane1: Lane, lane2 : Lane) {
-	Lane.toLane(lane1, lane2);
-	Lane.toLane(lane2, lane1);
 }
 
 @Constraint(severity = "error",
@@ -326,15 +237,6 @@ pattern toLaneSameSegmentSameDirection(lane1: Lane, lane2 : Lane) {
 	find lanesInSameSegmentAndDirection(_, lane1, lane2);
 }
 
-@Constraint(severity = "error",
-            message = "All turning lanes and lanes in same segment must be forward",
-            key = {lane2})
-pattern turningLaneBackward(lane1: TurningLane, lane2 : Lane) {
-	find roadComponentOfRoadSegment(segment, lane1);
-	RoadSegment.backward(segment, lane2);
-}
-
-
 // TODO could define minimum length before it returns to same segment
 @Constraint(severity = "error",
             message = "toLane and fromLane of a lane must be in different segments",
@@ -347,26 +249,34 @@ pattern toLaneAndFromLaneInSameSegment(lane1: Lane) {
 }
 
 @Constraint(severity = "error",
-            message = "rightNeighborOfNeighbor can't point to itself",
-            key = {segment})
-pattern rightNeighborOfNeighborPointsToItself(segment : RoadSegment) {
-	RoadSegment.rightNeighborOfNeighbor(segment, segment);
+            message = "toLanes are in different segments",
+            key = {lane})
+pattern toLanesInDifferentSegments(lane : Lane) {
+	Lane.toLane(lane, lane2);
+	Lane.toLane(lane, lane3);
+	find roadComponentOfRoadSegment(segment, lane2);
+	neg find roadComponentOfRoadSegment(segment, lane3);
 }
-
 
 @Constraint(severity = "error",
-            message = "Only segments next to a segment with turning lane can have rightNeighborOfNeigbor",
-            key = {segment})
-pattern rightNeighborOfNeighborNoTurningLane(segment : RoadSegment) {
-	RoadSegment.rightNeighborOfNeighbor(segment, _);
-	neg find segmentNextToTurn(segment);
+            message = "fromLanes are in different segments",
+            key = {lane})
+pattern fromLanesInDifferentSegments(lane : Lane) {
+	Lane.fromLane(lane, lane2);
+	Lane.fromLane(lane, lane3);
+	find roadComponentOfRoadSegment(segment, lane2);
+	neg find roadComponentOfRoadSegment(segment, lane3);
 }
 
-private pattern segmentNextToTurn(segment : RoadSegment) {
-	find directlyConnectedSegments(segment, intersection);
-	find roadComponentOfRoadSegment(intersection, turn);
-	TurningLane(turn);
-}
+
+
+
+
+
+
+
+
+// Constraints for StraightLanes
 
 @Constraint(severity = "error",
             message = "If two straight lanes are in the same segment and their toLanes/fromLanes are in the same segment, they must be next to each other",
@@ -389,13 +299,6 @@ pattern missingLeftLaneConnectionFromLane(lane1 : StraightLane, lane2 : Straight
 	find lanesInSameSegmentAndDirection(segment1, lane3, lane4);
 	neg find leftLaneOrRightLaneTransitive(lane1, lane2); 
 }
-
-private pattern leftLaneOrRightLaneTransitive(lane1 : Lane, lane2 : Lane) {
-	find leftLane+(lane1, lane2);
-} or {
-	find rightLane+(lane1, lane2);
-}
-
 
 // exclude straight lanes splitting/merging
 @Constraint(severity = "error",
@@ -420,90 +323,104 @@ pattern mergingLane(lane : Lane) {
 	StraightLane(lane3);
 }
 
+
+
+
+
+
+
+
+
+
+
+// Constraints for TurningLanes
+
 @Constraint(severity = "error",
-            message = "toLanes are in different segments",
-            key = {lane})
-pattern toLanesInDifferentSegments(lane : Lane) {
-	Lane.toLane(lane, lane2);
-	Lane.toLane(lane, lane3);
+            message = "Turning lane can't have leftLane",
+            key = {lane1, lane2})
+pattern turningLaneHasLeftLane(lane1: TurningLane, lane2 : Lane) {
+	RoadComponent.leftLane(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "Turning lane can't have rightLane",
+            key = {lane1, lane2})
+pattern turningLaneHasRightLane(lane1: TurningLane, lane2 : Lane) {
+	RoadComponent.rightLane(lane1, lane2);
+}
+
+@Constraint(severity = "error",
+            message = "fromLane of turning lane must be in a different segment",
+            key = {lane1, lane2})
+pattern fromLaneOfTurnInSameSegment(lane1: TurningLane, lane2: Lane) {
+	Lane.fromLane(lane1, lane2);
+	find roadComponentOfRoadSegment(segment, lane1);
 	find roadComponentOfRoadSegment(segment, lane2);
-	neg find roadComponentOfRoadSegment(segment, lane3);
 }
 
 @Constraint(severity = "error",
-            message = "fromLanes are in different segments",
-            key = {lane})
-pattern fromLanesInDifferentSegments(lane : Lane) {
-	Lane.fromLane(lane, lane2);
-	Lane.fromLane(lane, lane3);
+            message = "toLane of turning lane must be in a different segment",
+            key = {lane1, lane2})
+pattern toLaneofTurnInSameSegment(lane1: TurningLane, lane2: Lane) {
+	Lane.toLane(lane1, lane2);
+	find roadComponentOfRoadSegment(segment, lane1);
 	find roadComponentOfRoadSegment(segment, lane2);
-	neg find roadComponentOfRoadSegment(segment, lane3);
-}
-
-// unconnected segments
-@Constraint(severity = "error",
-            message = "There is no path between the lanes of the segments",
-            key = {segment1, segment2})
-pattern unconnectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
-	segment1 != segment2;
-	neg find connectedSegments(segment1, segment2);
-}
-
-private pattern connectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
-	find directlyConnectedSegments+(segment1, segment2);
-}
-
-private pattern directlyConnectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
-	//segment1 != segment2;
-	find roadComponentOfRoadSegment(segment1, component1);
-	find roadComponentOfRoadSegment(segment2, component2);
-	Lane.toLane(component1, component2);
-} or {
-	//segment1 != segment2;
-	find roadComponentOfRoadSegment(segment1, component1);
-	find roadComponentOfRoadSegment(segment2, component2);
-	Lane.fromLane(component1, component2);
 }
 
 @Constraint(severity = "error",
-            message = "There are too many lanes next to each other",
-            key = {lane1, lane2, lane3})
-pattern tooWideRoad(lane1 : Lane, lane2 : Lane, lane3 : Lane) {
-	Lane.rightLane(lane1, lane2);
-	Lane.rightLane(lane2, lane3);
+            message = "Turn has no fromLane",
+            key = {turn})
+pattern turnNoFromLane(turn: TurningLane) {
+	neg find fromLane(turn, _fromlane);
 }
 
-// TODO if a segment has no turning lanes, all (straight) lanes must be connected to each other
+@Constraint(severity = "error",
+            message = "Turn has no toLane",
+            key = {turn})
+pattern turnNoToLane(turn: TurningLane) {
+	neg find toLane(turn, _tolane);
+}
 
+@Constraint(severity = "error",
+            message = "Turn is following an other turn",
+            key = {turn2})
+pattern turnFollowingTurn(turn1: TurningLane, turn2: TurningLane) {
+	Lane.toLane(turn1, turn2);
+}
+
+@Constraint(severity = "error",
+            message = "All turning lanes must be forward",
+            key = {lane1})
+pattern turningLaneBackward(lane1: TurningLane) {
+	RoadSegment.backward(segment, lane1);
+}
+
+@Constraint(severity = "error",
+            message = "All turning lanes and lanes in same segment must be forward",
+            key = {lane1, lane2})
+pattern intersectionLaneBackward(lane1: TurningLane, lane2 : Lane) {
+	find roadComponentOfRoadSegment(segment, lane1);
+	RoadSegment.backward(segment, lane2);
+}
 
 @Constraint(severity = "error",
             message = "If a segment has turning lanes, all lanes in that segment must be connected on both ends to straight lanes",
             key = {lane1, lane2})
 pattern turningLaneToLaneNotStaight(lane1 : TurningLane, lane2 : Lane) {
-	find roadComponentOfRoadSegment(segment, lane1);
-	find roadComponentOfRoadSegment(segment, lane2);
-	//lane1 != lane2;
+	lane1 != lane2;
+	RoadSegment.forward(segment, lane1);
+	RoadSegment.forward(segment, lane2);
 	neg find straightToLane(lane2, _);
-	
-}
-
-private pattern straightToLane(lane1 : Lane, lane2 : StraightLane) {
-	Lane.toLane(lane1, lane2);
 }
 
 @Constraint(severity = "error",
             message = "If a segment has turning lanes, all lanes in that segment must be connected on both ends to straight lanes",
             key = {lane1, lane2})
 pattern turningLaneFromLaneNotStaight(lane1 : TurningLane, lane2 : Lane) {
-	find roadComponentOfRoadSegment(segment, lane1);
-	find roadComponentOfRoadSegment(segment, lane2);
-	//lane1 != lane2;
+	lane1 != lane2;
+	RoadSegment.forward(segment, lane1);
+	RoadSegment.forward(segment, lane2);
 	neg find straightFromLane(lane2, _);
-	
-}
-
-private pattern straightFromLane(lane1 : Lane, lane2 : StraightLane) {
-	Lane.fromLane(lane1, lane2);
 }
 
 // fromLane and toLane of TurningLane must be StraightLane AND all lanes in the segment containing the toLane/fromLane must be Straight
@@ -526,6 +443,53 @@ pattern turningLaneInSegmentOfFromLaneOfTurningLane(lane1 : TurningLane, lane2 :
 }
 
 
+
+
+
+
+
+// Constraints for RoadSegments
+
+@Constraint(severity = "error",
+            message = "RoadSegment must have at least one RoadComponent",
+            key = {roadSegment})
+pattern emptyRoadSegment(roadSegment : RoadSegment) {
+	neg find roadComponentOfRoadSegment(roadSegment, _);
+}
+
+@Constraint(severity = "error",
+            message = "RoadSegment connected to segment with turning lane must have rightNeighborOfNeighbor and leftNeigborOfNeighbor",
+            key = {roadSegment})
+pattern roadSegmentNoNeighbor(roadSegment : RoadSegment) {
+	find segmentNextToTurn(roadSegment);
+	neg find neighborOfNeighborOfRoadSegment(roadSegment, _);
+}
+
+@Constraint(severity = "error",
+            message = "rightNeighborOfNeighbor can't point to itself",
+            key = {segment})
+pattern rightNeighborOfNeighborPointsToItself(segment : RoadSegment) {
+	RoadSegment.rightNeighborOfNeighbor(segment, segment);
+}
+
+
+@Constraint(severity = "error",
+            message = "Only segments next to a segment with turning lane can have rightNeighborOfNeigbor",
+            key = {segment})
+pattern rightNeighborOfNeighborNoTurningLane(segment : RoadSegment) {
+	RoadSegment.rightNeighborOfNeighbor(segment, _);
+	neg find segmentNextToTurn(segment);
+}
+
+// unconnected segments
+@Constraint(severity = "error",
+            message = "There is no path between the lanes of the segments",
+            key = {segment1, segment2})
+pattern unconnectedSegments(segment1 : RoadSegment, segment2 : RoadSegment) {
+	segment1 != segment2;
+	neg find connectedSegments(segment1, segment2);
+}
+/*
 @Constraint(severity = "error",
             message = "segments around an intersection must form a single rightNeighborOfNeighbor cycle",
             key = {intersection})
@@ -533,20 +497,6 @@ pattern rightNeighborOfNeighborNotOneCycle(intersection : RoadSegment) {
 	find commonConnectedIntersection(segment1, segment2, intersection);
 	neg find rightNeighborOfNeighborTransitive(segment1, segment2);
 }
-
-private pattern rightNeighborOfNeighborTransitive(segment1 : RoadSegment, segment2 : RoadSegment) {
-	find rightNeighborOfNeighbor+(segment1, segment2);
-}
-
-
-private pattern rightNeighborOfNeighbor(segment1 : RoadSegment, segment2 : RoadSegment) {
-	RoadSegment.rightNeighborOfNeighbor(segment1, segment2);
-}
-
-private pattern leftNeighborOfNeighbor(segment1 : RoadSegment, segment2 : RoadSegment) {
-	RoadSegment.leftNeighborOfNeighbor(segment1, segment2);
-}
-
 
 @Constraint(severity = "error",
             message = "if a segment has rightNeighborOfNeighbor it must have leftNeighborOfNeighbor as well",
@@ -563,23 +513,15 @@ pattern leftNeighborNoRightNeighbor(segment : RoadSegment) {
 	RoadSegment.leftNeighborOfNeighbor(segment, _);
 	neg find rightNeighborOfNeighbor(segment, _);
 }
-
-
+*/
 @Constraint(severity = "error",
             message = "if two segments are connected by rightNeighborOfNeighbor they must be connected to the same segment with turning lane",
             key = {segment1, segment2})
 pattern disconnectedRightNeighborOfNeighbor(segment1 : RoadSegment, segment2 : RoadSegment) {
 	RoadSegment.rightNeighborOfNeighbor(segment1, segment2);
-	neg find commonConnectedIntersection(segment1, segment2, _);
-}
-
-
-private pattern commonConnectedIntersection(segment1 : RoadSegment, segment2 : RoadSegment, common : RoadSegment) {
-	segment1 != segment2;
-	find roadComponentOfRoadSegment(common, turn);
-	TurningLane(turn);
-	find directlyConnectedSegments(segment1, common);
-	find directlyConnectedSegments(segment2, common);
+	find directlyConnectedSegments(segment1, intersection1);
+	find directlyConnectedSegments(segment2, intersection2);
+	intersection1 != intersection2;
 }
 
 // between two turning lanes there must be at least two separate segments with only straight lanes
@@ -595,11 +537,13 @@ pattern noSegmentBetweenTurns(segment1 : RoadSegment, segment2 : RoadSegment) {
 	find directlyConnectedSegments(segment1, segment2);
 }
 
-
 @Constraint(severity = "error",
             message = "a RoadSegment can only be connected to one intersection (segment with turning lane)",
             key = {segment, intersection1, intersection2})
 pattern singleSegmentBetweenTurns(segment : RoadSegment, intersection1 : RoadSegment, intersection2 : RoadSegment) {
+	intersection1 != intersection2;
+	segment != intersection1;
+	segment != intersection2;
 	find directlyConnectedSegments(segment, intersection1);
 	find directlyConnectedSegments(segment, intersection2);
 	find roadComponentOfRoadSegment(intersection1, turn1);
@@ -607,6 +551,129 @@ pattern singleSegmentBetweenTurns(segment : RoadSegment, intersection1 : RoadSeg
 	TurningLane(turn1);
 	TurningLane(turn2);
 }
+
+
+
+
+
+
+
+// Misc constraints
+
+@Constraint(severity = "error",
+            message = "Sidewalk is not on the side",
+            key = {sidewalk})
+pattern sidewalkNotOnRightSide(sidewalk: Sidewalk) {
+	RoadComponent.rightLane(sidewalk, _other);
+}
+
+@Constraint(severity = "error",
+            message = "Actor has multiple states in the same frame",
+            key = {frame, actor})
+pattern actorHasMultipleStatesInFrame(frame: Frame, actor: Actor) {
+	Frame.state(frame, state1);
+	Frame.state(frame, state2);
+	state1 != state2;
+	State.actor(state1, actor);
+	State.actor(state2, actor);
+}
+
+@Constraint(severity = "error",
+            message = "There is a cycle of 'nextFrame' references",
+            key = {frame})
+pattern nextFrameCycle(frame: Frame) {
+	find nextFrame+(frame, frame);
+}
+
+private pattern nextFrame(frame1: Frame, frame2: Frame) {
+	Frame.nextFrame(frame1, frame2);
+}
+
+@Constraint(severity = "error",
+            message = "Lane has more than one crosswalk",
+            key = {lane, sign1, sign2})
+pattern multipleCrosswalksOnLane(lane: RoadComponent, sign1: Crosswalk, sign2: Crosswalk) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+@Constraint(severity = "error",
+            message = "Lane has more than one stop sign",
+            key = {lane, sign1, sign2})
+pattern multipleStopSignsOnLane(lane: RoadComponent, sign1: StopSign, sign2: StopSign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+
+@Constraint(severity = "error",
+            message = "Lane has more than one give way sign",
+            key = {lane, sign1, sign2})
+pattern multipleGiveWaySignsOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: GiveWaySign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+
+@Constraint(severity = "error",
+            message = "Lane has give way sign and stop sign",
+            key = {lane, sign1, sign2})
+pattern giveWaySignAndStopSignOnLane(lane: RoadComponent, sign1: GiveWaySign, sign2: StopSign) {
+	sign1 != sign2;
+	Sign.forRoadComponent(sign1, lane);
+	Sign.forRoadComponent(sign2, lane);
+}
+@Constraint(severity = "error",
+            message = "Sidewalk is not next to a lane",
+            key = {sidewalk})
+pattern unreachableSidewalk(sidewalk: Sidewalk) {
+	neg find reachableSidewalk(sidewalk);
+}
+
+
+
+
+
+
+
+// Practical constraints
+
+@Constraint(severity = "error",
+            message = "toLane cycle of length two",
+            key = {lane1, lane2})
+pattern twoLongToLaneCycle(lane1: Lane, lane2 : Lane) {
+	Lane.toLane(lane1, lane2);
+	Lane.toLane(lane2, lane1);
+}
+
+@Constraint(severity = "error",
+            message = "There are too many lanes next to each other",
+            key = {lane1, lane2, lane3})
+pattern tooWideRoad(lane1 : Lane, lane2 : Lane, lane3 : Lane) {
+	Lane.rightLane(lane1, lane2);
+	Lane.rightLane(lane2, lane3);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TODO if a segment has no turning lanes, all (straight) lanes must be connected to each other
+
+
+
+
 
 
 
