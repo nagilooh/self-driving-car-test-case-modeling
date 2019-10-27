@@ -282,6 +282,7 @@ pattern fromLanesInDifferentSegments(lane : Lane) {
             message = "If two straight lanes are in the same segment and their toLanes/fromLanes are in the same segment, they must be next to each other",
             key = {lane1, lane2})
 pattern missingLeftLaneConnectionToLane(lane1 : StraightLane, lane2 : StraightLane) {
+	lane1 != lane2;
 	find lanesInSameSegmentAndDirection(segment1, lane1, lane2);
 	Lane.toLane(lane1, lane3);
 	Lane.toLane(lane2, lane4);
@@ -293,6 +294,7 @@ pattern missingLeftLaneConnectionToLane(lane1 : StraightLane, lane2 : StraightLa
             message = "If two straight lanes are in the same segment and their toLanes/fromLanes are in the same segment, they must be next to each other",
             key = {lane1, lane2})
 pattern missingLeftLaneConnectionFromLane(lane1 : StraightLane, lane2 : StraightLane) {
+	lane1 != lane2;
 	find lanesInSameSegmentAndDirection(segment1, lane1, lane2);
 	Lane.fromLane(lane1, lane3);
 	Lane.fromLane(lane2, lane4);
